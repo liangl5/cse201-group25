@@ -1,8 +1,11 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
 /* Add a black background color to the top navigation bar */
 .topnav {
     overflow: hidden;
     background-color: #e9e9e9;
-    font-family: Arial, sans-serif;
   }
   
   /* Style the links inside the navigation bar */
@@ -29,7 +32,6 @@
   }
 
   .topnav #searchBtn {
-    font-family: Arial, sans-serif;
     float:right;
     margin-top: 8px;
     margin-right: 12px;
@@ -50,16 +52,25 @@
     font-size: 17px;
   }
 
-.appInformation {
+.display {
     text-align: center;
     margin-top: 30px;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
     border: 3px solid green;
+    padding: 10px;
 }
 
-.banner {
+#AboutDiv {
+  display: none;
+}
+
+#ContactDiv {
+  display: none;
+}
+
+#banner {
     text-align: center;
     margin-top: 30px;
     max-width: 1200px;

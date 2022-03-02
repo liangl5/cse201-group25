@@ -9,23 +9,34 @@
     <body>
 
         <div class="topnav">
-            <a class="nav active">Home</a>
-            <a class="nav notactive">About</a>
-            <a class="nav notactive">Contact</a>
+            <a id="homeNav" class="nav active">Home</a>
+            <a id="aboutNav" class="nav notactive">About</a>
+            <a id="contactNav" class="nav notactive">Contact</a>
+
+            <button id="loginBtn">Login</button>
+
             <button id="searchBtn">Enter</button>
-            <input type="text" placeholder="Search..">
+            <input id="searchBar" type="text" placeholder="Search..">
             
         </div>
 
-        <div class="banner">
+        <div id="banner">
             <h1>GitApps</h1>
 
         </div>
 
-        <div class="appInformation">
-            <p>We are displaying text here!</p>
-            <p>This will most likely change data given the search bar</p>
+        <!-- These 3 divs swap between being hidden and not being hidden -->
+        <div class="display" id="HomeDiv">
+            We are displaying text here!
+            This will most likely change data given the search bar
+        </div>
 
+        <div class="display" id="AboutDiv">
+            Insert about
+        </div>
+
+        <div class="display"  id="ContactDiv">
+            Insert contact
         </div>
 
     </body>
