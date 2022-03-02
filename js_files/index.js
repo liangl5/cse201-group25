@@ -30,7 +30,7 @@ for (const element of navBtns) {
 }
 
 
-
+// the search functionality
 document.getElementById("searchBtn").addEventListener("click", (evt)=>{
     var strInput = document.getElementById("searchBar").value
 
@@ -43,4 +43,10 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
         // super simple update which we will hook up to actual querying
         document.getElementById("HomeDiv").innerText = strInput
     }
+})
+
+
+// the login functionality
+document.getElementById("loginBtn").addEventListener("click", (evt)=>{
+    console.log(evt)
 })

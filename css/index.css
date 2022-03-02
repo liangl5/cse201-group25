@@ -31,6 +31,17 @@ body {
     color: white;
   }
 
+  .topnav #loginBtn {
+    float:right;
+    margin-top: 8px;
+    margin-right: 12px;
+    padding: 6px;
+    background-color: #2196F3; 
+    text-align: center;
+    text-decoration: none;
+    border-color: #2196F3;
+  }
+
   .topnav #searchBtn {
     float:right;
     margin-top: 8px;
