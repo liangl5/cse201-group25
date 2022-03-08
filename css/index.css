@@ -1,5 +1,6 @@
 body {
-  font-family: Arial, sans-serif;
+  
+  font-family: 'Roboto Slab', serif;
 }
 
 /* Add a black background color to the top navigation bar */
@@ -17,6 +18,7 @@ body {
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
+    
   }
   
   /* Change the color of links on hover */
@@ -27,19 +29,20 @@ body {
   
   /* Style the "active" element to highlight the current page */
   .topnav a.active {
-    background-color: #2196F3;
+    background-color: rgb(25, 32, 53);
     color: white;
   }
 
   .topnav #loginBtn {
     float:right;
+    color: white;
     margin-top: 8px;
     margin-right: 12px;
     padding: 6px;
-    background-color: #2196F3; 
+    background-color: rgb(25, 32, 53); 
     text-align: center;
     text-decoration: none;
-    border-color: #2196F3;
+    border-color: rgb(25, 32, 53);
   }
 
   .topnav #searchBtn {
@@ -47,10 +50,10 @@ body {
     margin-top: 8px;
     margin-right: 12px;
     padding: 6px;
-    background-color: #4CAF50; 
+    background-color: #39a4eb; 
     text-align: center;
     text-decoration: none;
-    border-color: #4CAF50;
+    border-color: #39a4eb;  
   }
   
   /* Style the search box inside the navigation bar */
@@ -66,10 +69,10 @@ body {
 .display {
     text-align: center;
     margin-top: 30px;
-    max-width: 1200px;
+    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
-    border: 3px solid green;
+    border: 3px solid rgb(25, 32, 53);
     padding: 10px;
 }
 
@@ -83,10 +86,33 @@ body {
 
 #banner {
     text-align: center;
-    padding: 10px;
+    font-weight: bold;
+    background-color: #ddd;
+    font-size: 20px;
+    padding: 16px;
     margin-top: 30px;
-    max-width: 1200px;
+    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
-    border: 3px solid green;
+    border: 6px solid rgb(25, 32, 53);
+    color:rgb(25, 32, 53);
+    position: relative;
 }
+
+.logo {
+  width: 80px;
+  position: absolute;
+  left: 350px;
+  right: 100px;
+  top: 27px
+
+}
+
+.logo1 {
+  width: 40px;
+  position: relative;
+  top: 3px;
+  left: 3px;
+
+}
+
