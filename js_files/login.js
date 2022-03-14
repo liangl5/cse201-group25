@@ -10,3 +10,4 @@ document.getElementById("loginBtn").addEventListener("click", ()=>{
     document.getElementById("createAccDiv").style.display = "none";
     document.getElementById("loginDiv").style.display = "block";
 })
+

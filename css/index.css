@@ -39,10 +39,10 @@ body {
     margin-top: 8px;
     margin-right: 12px;
     padding: 6px;
-    background-color: rgb(25, 32, 53); 
+    background-color: rgb(65, 61, 61); 
     text-align: center;
     text-decoration: none;
-    border-color: rgb(25, 32, 53);
+    border-color: rgb(65, 61, 61);
   }
 
   .topnav #searchBtn {

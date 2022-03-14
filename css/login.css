@@ -117,3 +117,16 @@ body{
 #createAccDiv {
     display: none;
 }
+
+#backBtn {
+    float:right;
+    position: absolute;
+    right: 535px;
+    top: 242px;
+    padding: 6px;
+    background-color: rgb(65, 61, 61); 
+    text-align: center;
+    border-color: rgb(65, 61, 61);  
+    color:white;
+    font: 500 1rem 'Roboto Slab', serif;
+  }
