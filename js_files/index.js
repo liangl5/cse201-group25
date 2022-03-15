@@ -39,7 +39,7 @@ for (const element of navBtns) {
 
 // the search functionality
 document.getElementById("searchBtn").addEventListener("click", (evt)=>{
-    var strInput = document.getElementById("searchBar").value
+    var strInput = document.getElementById("searchBar").value.trim().toLowerCase()
 
     // simulate clicking so it will return to home page
     var displayDiv = document.getElementById("homeNav")
@@ -47,21 +47,47 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
 
     // super simple update which we will hook up to actual querying
     // document.getElementById("HomeDiv").innerText = strInput
-    displayApps = globalAppData
+    displayApps = []
     if (strInput != "") {
         // somefiltering here
-        console.log("filter here")
+        for (i = 0; i < globalAppData.length; i++) {
+            // filter by name and category
+            appName = globalAppData[i][0].toLowerCase()
+            category = globalAppData[i][2].toLowerCase()
+
+            if (appName.includes(strInput) || category.includes(strInput)) {
+                displayApps.push(globalAppData[i])
+            }
+            
+        }
+    } else {
+        displayApps = globalAppData
     }
 
     // inner html
     displayHTML = ""
     for (i = 0; i < displayApps.length; i++) {
         displayHTML += "<div class='displayApps'>"
-        displayHTML += displayApps[i][0]
+
+        // name
+        displayHTML += "<h3 class='left name'>" + displayApps[i][0] + "</h3>"
+
+        // company name
+        displayHTML += "<p class='left'>" + displayApps[i][1] + "</p>"
+
+        // Category
+        displayHTML += "<p class='left'>" + displayApps[i][2] + "</p>"
+
+        // description
+        displayHTML += "<p class='left'>" + displayApps[i][3] + "</p>"
 
         displayHTML += "</div>"
     }
 
+    // nothing to display
+    if (displayHTML == "") {
+        displayHTML = "<p>No search results, try different keywords</p>"
+    }
     document.getElementById("HomeDiv").innerHTML = displayHTML
 })
 

@@ -121,7 +121,7 @@ body {
 }
 
 .displayApps {
-  text-align: left;
+  text-align: center;
   width: 100%;
   height: 100%;
   max-width: 450px;
@@ -130,4 +130,14 @@ body {
   padding: 10px;
   display: inline-block;
   margin: 20px;
+}
+
+.left {
+  text-align: left;
+  padding-left: 10px;
+  margin: 0px;
+}
+
+.name {
+  padding-bottom: 3px;
 }
