@@ -72,8 +72,12 @@ body {
     max-width: 1300px;
     margin-left: auto;
     margin-right: auto;
-    border: 3px solid rgb(25, 32, 53);
+    /*border: 3px solid rgb(25, 32, 53);*/
     padding: 10px;
+}
+
+.border {
+  border: 3px solid rgb(25, 32, 53);
 }
 
 #AboutDiv {
@@ -102,7 +106,7 @@ body {
 .logo {
   width: 80px;
   position: absolute;
-  left: 350px;
+  left: 32%;
   right: 100px;
   top: 27px
 
@@ -116,3 +120,14 @@ body {
   margin-top: 2px;
 }
 
+.displayApps {
+  text-align: left;
+  width: 100%;
+  height: 100%;
+  max-width: 450px;
+  max-height: 300px;
+  border: 3px solid rgb(25, 32, 53);
+  padding: 10px;
+  display: inline-block;
+  margin: 20px;
+}

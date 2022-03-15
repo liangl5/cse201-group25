@@ -120,10 +120,8 @@ body{
 
 #backBtn {
     float:right;
-    position: absolute;
-    right: 535px;
-    top: 242px;
     padding: 6px;
+    margin-bottom: 350px;
     background-color: rgb(65, 61, 61); 
     text-align: center;
     border-color: rgb(65, 61, 61);  
