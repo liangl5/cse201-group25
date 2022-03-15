@@ -70,13 +70,13 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
         displayHTML += "<div class='displayApps'>"
 
         // name
-        displayHTML += "<h3 class='left name'>" + displayApps[i][0] + "</h3>"
+        displayHTML += "<h3 class='left bottompadding'>" + displayApps[i][0] + "</h3>"
 
         // company name
-        displayHTML += "<p class='left'>" + displayApps[i][1] + "</p>"
+        displayHTML += "<h4 class='left'>" + displayApps[i][1] + "</h4>"
 
         // Category
-        displayHTML += "<p class='left'>" + displayApps[i][2] + "</p>"
+        displayHTML += "<h4 class='left bottompadding'>" + displayApps[i][2] + "</h4>"
 
         // description
         displayHTML += "<p class='left'>" + displayApps[i][3] + "</p>"
