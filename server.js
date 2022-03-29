@@ -7,6 +7,7 @@ var htmlPath = path.join(__dirname, 'public');
 
 app.use(express.static(htmlPath));
 
+// sets up server at host and port
 var server = app.listen(8000, function () {
     var host = 'localhost';
     var port = server.address().port;
@@ -14,6 +15,7 @@ var server = app.listen(8000, function () {
 });
 
 
+// querys the database to get app data
 app.get('/loadApps',function(req,res) {
 	var con = mysql.createConnection({
 		host: "localhost",

@@ -1,5 +1,5 @@
 // grab the app data
-// can connect to db later
+// connected to db
 globalAppData =  []
 
 var xhr = new XMLHttpRequest();
