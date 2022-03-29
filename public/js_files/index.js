@@ -52,7 +52,6 @@ for (const element of navBtns) {
 document.getElementById("searchBtn").addEventListener("click", (evt)=>{
     var strInput = document.getElementById("searchBar").value.trim().toLowerCase()
 
-    console.log(globalAppData);
     // simulate clicking so it will return to home page
     var displayDiv = document.getElementById("homeNav")
     displayDiv.click()
