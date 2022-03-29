@@ -5,9 +5,9 @@ globalAppData =  []
 var xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
     if (xhr.readyState == XMLHttpRequest.DONE) {
-        var apps = JSON.parse(xhr.responseText);
+        var message = JSON.parse(xhr.responseText);
 
-        globalAppData = apps["apps"]
+        globalAppData = message["apps"];
         document.getElementById("searchBtn").click();
     }
 }
@@ -52,6 +52,7 @@ for (const element of navBtns) {
 document.getElementById("searchBtn").addEventListener("click", (evt)=>{
     var strInput = document.getElementById("searchBar").value.trim().toLowerCase()
 
+    console.log(globalAppData);
     // simulate clicking so it will return to home page
     var displayDiv = document.getElementById("homeNav")
     displayDiv.click()
@@ -63,8 +64,8 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
         // somefiltering here
         for (i = 0; i < globalAppData.length; i++) {
             // filter by name and category
-            appName = globalAppData[i][0].toLowerCase()
-            category = globalAppData[i][2].toLowerCase()
+            appName = globalAppData[i]["AppName"].toLowerCase()
+            category = globalAppData[i]["Category"].toLowerCase()
 
             if (appName.includes(strInput) || category.includes(strInput)) {
                 displayApps.push(globalAppData[i])
@@ -81,16 +82,16 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
         displayHTML += "<div class='displayApps'>"
 
         // name
-        displayHTML += "<h3 class='left bottompadding'>" + displayApps[i][0] + "</h3>"
+        displayHTML += "<h3 class='left bottompadding'>" + displayApps[i]["AppName"] + "</h3>"
 
         // company name
-        displayHTML += "<h4 class='left'>" + displayApps[i][1] + "</h4>"
+        displayHTML += "<h4 class='left'>" + displayApps[i]["CompanyName"] + "</h4>"
 
         // Category
-        displayHTML += "<h4 class='left bottompadding'>" + displayApps[i][2] + "</h4>"
+        displayHTML += "<h4 class='left bottompadding'>" + displayApps[i]["Category"] + "</h4>"
 
         // description
-        displayHTML += "<p class='left'>" + displayApps[i][3] + "</p>"
+        displayHTML += "<p class='left'>" + displayApps[i]["AppDescription"] + "</p>"
 
         displayHTML += "</div>"
     }
