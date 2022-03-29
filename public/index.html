@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>GitApps</title>
+        <link rel="stylesheet" type="text/css" href="./css/index.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="./js_files/index.js" defer></script>
+
+    </head>
+    
+    <body>
+
+        <div class="topnav">
+            <img class ="logo1" src ="./imgs/logoT.png" alt="">
+            <a id="homeNav" class="nav active">Home</a>
+            <a id="aboutNav" class="nav notactive">About</a>
+            <a id="contactNav" class="nav notactive">Contact</a>
+
+            <button id="loginBtn" onclick="window.location='login.html';">Login</button>
+
+            <button id="searchBtn">Enter</button>
+            <input id="searchBar" type="text" placeholder="Search..">
+            
+        </div>
+
+        <div id="banner">
+            <img class ="logo" src ="./imgs/logoT.png" alt="">
+            <h1 id="logoHeading">GitApps</h1>
+
+        </div>
+
+        <!-- These 3 divs swap between being hidden and not being hidden -->
+        <div class="display" id="HomeDiv">
+        </div>
+
+        <div class="border display" id="AboutDiv">
+            Welcome to GitApps! GitApps is an app library that allows users, developers, and researchers to browse,
+	    compare, purchase and discuss applications. GitApps allows you to easily sort and filter applications based
+	    on many different criteria. GitApps also gives you a place to discuss these applications with other users 
+	    by creating comments.  
+        </div>
+
+        <div class="border display"  id="ContactDiv">
+            Insert contact
+        </div>
+
+    </body>
+
+
+</html>
+
+
