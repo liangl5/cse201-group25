@@ -24,8 +24,13 @@ document.getElementById("loginBtn").addEventListener("click", ()=>{
 // xhr.send(null);
 
 
-document.getElementById("submitcreate").addEventListener("click", ()=>{
+var create = document.getElementById("submitcreate")
+create.addEventListener("click", ()=>{
     console.log("raete new acc");
+    if (!login.classList.contains("submitting")) {
+        login.classList.add("submitting");
+
+    }
 });
 
 var login = document.getElementById("submitlogin")
@@ -56,6 +61,7 @@ login.addEventListener("click", ()=>{
                 alert("Incorrect Login")
             } else {
                 console.log("Successfully Logged In")
+                console.log(accdata)
             }
 
             login.classList.remove("submitting");
