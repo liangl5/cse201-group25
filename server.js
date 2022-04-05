@@ -42,3 +42,31 @@ app.get('/loadApps',function(req,res) {
 	});		  
 });
 
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
+
+app.post('/login', function (req, res) {
+	var email = req.body.email
+	var password = req.body.password
+	console.log(email, password)
+
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "password"
+	});
+
+	con.connect(function(err) {
+		if (err) throw err;
+	  
+		con.query("USE GitApps;", ()=>{});
+	  
+		con.query("SELECT AccountID, isAdmin FROM Accounts WHERE UserEmail = '"+email+"' && UserPassword = SHA2('" + password + "', 512);", function (err, result, fields) {
+			if (err) throw err;
+			console.log(result)
+			res.send(JSON.stringify(result))
+		});
+	});	
+})

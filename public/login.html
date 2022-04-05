@@ -17,14 +17,14 @@
             <h1 class="form__title">Login</h1>
             <div class="form__message form_message--error"></div>
             <div class="form__input-group">
-                <input type="text" class="form__input" autofocus placeholder="Email">
+                <input type="text" class="form__input" id="login_email" autofocus placeholder="Email">
                 <div class="form__input-error-message"></div>
             </div>
             <div class="form__input-group">
-                <input type="password" class="form__input" autofocus placeholder="Password">
+                <input type="password" class="form__input" autofocus placeholder="Password" id="login_password" autocomplete="on">
                 <div class="form__input-error-message"></div>
             </div>
-            <button class="form__button" type="submit">Login</button>
+            <button class="form__button" type="button" id="submitlogin">Login</button>
             <p class="form__text">
                 <a href="#" class ="form__link">Forgot your password?</a>
             </p>
@@ -36,7 +36,7 @@
 
 
     <div class="container" id="createAccDiv">
-        <form class="form" id="login">
+        <form class="form" id="create_account">
             <h1 class="form__title">Create An Account</h1>
             <div class="form__message form_message--error"></div>
             <div class="form__input-group">
@@ -48,10 +48,10 @@
                 <div class="form__input-error-message"></div>
             </div>
             <div class="form__input-group">
-                <input type="password" class="form__input" autofocus placeholder="Password">
+                <input type="password" class="form__input" autofocus placeholder="Password"  autocomplete="on">
                 <div class="form__input-error-message"></div>
             </div>
-            <button class="form__button" type="submit">Create Account</button>
+            <button class="form__button" type="button" id="submitcreate">Create Account</button>
             <p class="form__text">
                 <a href="#" class ="form__link" id="loginBtn">Already have an account? Login</a>
             </p>

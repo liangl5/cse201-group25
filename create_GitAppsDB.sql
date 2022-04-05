@@ -3,7 +3,7 @@ CREATE DATABASE GitApps;
 
 USE GitApps;
 
-DROP TABLE IF EXISTS Admins;
+/*DROP TABLE IF EXISTS Admins;*/
 DROP TABLE IF EXISTS Moderators;
 DROP TABLE IF EXISTS Accounts;
 DROP TABLE IF EXISTS Apps;
@@ -11,12 +11,12 @@ DROP TABLE IF EXISTS Comments;
 
 
 /****** Object:  Table Admins  ******/   
-CREATE TABLE Admins(
+/*CREATE TABLE Admins(
 	AdminID 		int  PRIMARY KEY   NOT NULL,
 	AdminName 		nvarchar(30) 		NOT NULL,
 	AdminPassword 	nvarchar(30) 		NOT NULL,
 	Token		 	nvarchar(30) 		NOT NULL
-);
+);*/
 
 /****** Object:  Table Moderators  ******/   
 CREATE TABLE Moderators(
@@ -30,9 +30,11 @@ CREATE TABLE Moderators(
 CREATE TABLE Accounts(
 	AccountID 		int 	PRIMARY KEY 	NOT NULL,
 	UserName 		nvarchar(30) 		NOT NULL,
-	UserPassword 	nvarchar(30) 		NOT NULL,
+	UserEmail		nvarchar(30)		NOT NULL,
+	UserPassword 	nvarchar(512) 		NOT NULL,
 	DateCreated 	DATE 				NOT NULL,
-	UserBio 		nVARCHAR(255) 		NULL
+	UserBio 		nVARCHAR(255) 		NULL,
+	isAdmin			BOOLEAN 			DEFAULT false
 );
 
 
@@ -57,23 +59,31 @@ CREATE TABLE Comments(
 	Details 			nVARCHAR(255) 		NULL
 );
 
+/*
 INSERT INTO Admins(AdminID, AdminName, AdminPassword, Token) VALUES 
 	(1, 'Hane Kaiser', 'Admin1', 'SampleToken1'),
    	(2, 'Luke Liang', 'Admin2', 'SampleToken2'),
    	(3, 'Stephen Zigmond', 'Admin3', 'SampleToken3'),
-   	(4, 'Cole Winkart', 'Admin4', 'SampleToken4');
+   	(4, 'Cole Winkart', 'Admin4', 'SampleToken4');*/
 
 INSERT INTO Moderators(ModeratorID, ModeratorName, ModeratorPassword, Token) VALUES 
 	(1, 'Discord Mod', 'Admin1', 'SampleToken1'),
 	(2, 'Reddit Mod', 'Admin2', 'SampleToken2'),
 	(3, 'Normal Person', 'Admin3', 'SampleToken3'),
 	(4, 'Gregory Bahamas', 'Admin4', 'SampleToken4');
+ 
+INSERT INTO Accounts(AccountID, UserName, UserEmail, UserPassword, DateCreated, UserBio) VALUES
+	(5, 'Sal_Vulcano', "sal@gmail.com", 	SHA2('impracticalJ0k3rs', 512), 	'2022-3-2', 'Sal forgot to delete his comment, making him tonights biggest loser'),
+	(6, 'Elon_Musk', "elongate@gmail.com", 	SHA2('Gamer', 512), 				'2022-3-2', 'CEO of Tesla and SpaceX'),
+	(7, 'John_Wick', "wickydog@gmail.com", 	SHA2('iWantMyDog', 512), 			'2022-3-2', 'I just want to make things even'),
+	(8, 'Will_Smith', "gijane@yahoo.com", 	SHA2('iAmLegend', 512), 			'2022-3-2', 'From West Philadelphia, born and raised');
 
-INSERT INTO Accounts(AccountID, UserName, UserPassword, DateCreated, UserBio) VALUES
-	(1, 'Sal_Vulcano', 'impracticalJ0k3rs', '2022-3-2', 'Sal forgot to delete his comment, making him tonights biggest loser'),
-	(2, 'Elon_Musk', 'Gamer', '2022-3-2', 'CEO of Tesla and SpaceX'),
-	(3, 'John Wick', 'iWantMyDog', '2022-3-2', 'I just want to make things even'),
-	(4, 'Will Smith', 'iAmLegend', '2022-3-2', 'From West Philadelphia, born and raised');
+INSERT INTO Accounts(AccountID, UserName, UserEmail, UserPassword, DateCreated, UserBio, isAdmin) VALUES
+	(1, 'kaiser', 'kaiserht@miamioh.edu', 	SHA2('admin', 512), '2022-1-3', "Temp", true),
+   	(2, 'liang', 'liangl5@miamioh.edu', 	SHA2('admin', 512), '2022-1-3', "Temp", true),
+   	(3, 'zigmond', 'zigmonsg@miamioh.ed', 	SHA2('admin', 512), '2022-1-3', "Temp", true),
+   	(4, 'winkhart', 'winkhaca@miamioh.edu', SHA2('admin', 512), '2022-1-3', "Temp", true);
+
 
 INSERT INTO Apps(AppID, AppName, CompanyName, Category, AppDescription) VALUES
 	(1, 'Uber', 'Uber Technologies', 'Travel', 'Peer-to-peer ridesharing and food delivery platform'),
@@ -87,3 +97,4 @@ INSERT INTO Comments(CommentID, AccountID, AppID, CommentDate, LikeCount, Dislik
 	(3, 4, 3, '2022-3-2', 200, 0, 'Good app'),
 	(4, 1, 4, '2022-3-2', 30, 2, '10/10, would recommend again');
 
+/*UPDATE Accounts SET UserPassword = SHA2(UserPassword)*/
