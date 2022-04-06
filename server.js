@@ -65,8 +65,43 @@ app.post('/login', function (req, res) {
 	  
 		con.query("SELECT AccountID, isAdmin FROM Accounts WHERE UserEmail = '"+email+"' && UserPassword = SHA2('" + password + "', 512);", function (err, result, fields) {
 			if (err) throw err;
-			console.log(result)
-			res.send(JSON.stringify(result))
+			console.log(result[0])
+			res.send(JSON.stringify(result[0]))
 		});
 	});	
+})
+
+
+
+app.post('/createAccount', function(req, res) {
+
+	var username = req.body.username
+	var email = req.body.email
+	var password = req.body.password
+	console.log(username, email, password)
+
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "password"
+	});
+
+	con.connect(function(err) {
+		if (err) throw err;
+	  
+		con.query("USE GitApps;", ()=>{});
+	  
+		// first query to make sure username and email are not already in use
+		con.query("SELECT COUNT(*) from Accounts WHERE UserEmail = '"+email+"' || UserName = '" + username + "';", function (err, result, fields) {
+			if (err) throw err;
+			if (result[0]["COUNT(*)"] > 0) {
+				res.send(JSON.stringify({"error": 1, "message": "Username or email already in use"}))
+			} else {
+
+				con.query("INSERT INTO Apps(AppID, AppName, CompanyName, Category, AppDescription) VALUES (1, 'Uber', 'Uber Technologies', 'Travel', 'Peer-to-peer ridesharing and food delivery platform'),", ()=>{});
+
+			}
+		});
+	});	
+
 })

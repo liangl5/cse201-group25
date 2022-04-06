@@ -128,3 +128,84 @@ body{
     color:white;
     font: 500 1rem 'Roboto Slab', serif;
   }
+
+
+
+/* Notification Pop Up */
+
+/* Popup box BEGIN */
+/* .hover_bkgr_fricc{
+    background:rgba(0,0,0,.4);
+    cursor:pointer;
+    display:none;
+    height:100%;
+    position:fixed;
+    text-align:center;
+    top:0;
+    width:100%;
+    z-index:10000;
+} */
+
+.hover_bkgr_fricc{
+    cursor:pointer;
+    display:none;
+    text-align: center;
+    position: fixed;
+    top: 15%;
+    width: 700px;
+    height: 50px;
+
+    padding-left: 10px;
+}
+
+.hover_bkgr_fricc .helper{
+    display:inline-block;
+    height:100%;
+    vertical-align:middle;
+}
+.hover_bkgr_fricc > div {
+    background-color: rgb(223, 113, 113);
+    box-shadow: 10px 10px 60px #555;
+    display: inline-block;
+    height: auto;
+    width: 300px;
+    height: 50px;
+    vertical-align: middle;
+    left: -4.5%;
+    width: 60%;
+    position: relative;
+    border-radius: 8px;
+    padding: 15px 5%;
+}
+.popupText {
+    font: 500 1rem 'Roboto Slab', serif;
+    padding: 13px 0;
+}
+.popupCloseButton {
+    background-color: rgb(223, 113, 113);
+    border: 3px solid rgb(179, 90, 90);
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-weight: bold;
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    font-size: 25px;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+.popupCloseButton:hover {
+    background-color: rgb(179, 90, 90);
+}
+.trigger_popup_fricc {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 20px;
+    display: inline-block;
+    font-weight: bold;
+}
+/* Popup box BEGIN */
