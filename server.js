@@ -63,10 +63,10 @@ app.post('/login', function (req, res) {
 	  
 		con.query("USE GitApps;", ()=>{});
 	  
-		con.query("SELECT AccountID, isAdmin FROM Accounts WHERE UserEmail = '"+email+"' && UserPassword = SHA2('" + password + "', 512);", function (err, result, fields) {
+		con.query("SELECT AccountID, isAdmin, isModerator FROM Accounts WHERE UserEmail = '"+email+"' && UserPassword = SHA2('" + password + "', 512);", function (err, result, fields) {
 			if (err) throw err;
-			console.log(result[0])
-			res.send(JSON.stringify(result[0]))
+			console.log(result)
+			res.send(JSON.stringify(result))
 		});
 	});	
 })
@@ -91,17 +91,27 @@ app.post('/createAccount', function(req, res) {
 	  
 		con.query("USE GitApps;", ()=>{});
 	  
+		var senddata = ""
 		// first query to make sure username and email are not already in use
 		con.query("SELECT COUNT(*) from Accounts WHERE UserEmail = '"+email+"' || UserName = '" + username + "';", function (err, result, fields) {
 			if (err) throw err;
 			if (result[0]["COUNT(*)"] > 0) {
-				res.send(JSON.stringify({"error": 1, "message": "Username or email already in use"}))
+				res.send(JSON.stringify({"error": 1, "message": "Username or email already in use"}));
 			} else {
 
-				con.query("INSERT INTO Apps(AppID, AppName, CompanyName, Category, AppDescription) VALUES (1, 'Uber', 'Uber Technologies', 'Travel', 'Peer-to-peer ridesharing and food delivery platform'),", ()=>{});
+				var today = new Date();
+				var dd = String(today.getDate()).padStart(2, '0');
+				var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+				var yyyy = today.getFullYear();
+				today = yyyy+'-'+mm+'-'+dd;
 
+				console.log("INSERT INTO Accounts(UserName, UserEmail, UserPassword, DateCreated, UserBio) VALUES ('"+username +"','" + email + "',SHA2('" + password + "', 512),'" + today + "','Bio');")
+				con.query("INSERT INTO Accounts(UserName, UserEmail, UserPassword, DateCreated, UserBio) VALUES ('"+username +"','" + email + "',SHA2('" + password + "', 512),'" + today + "','Bio');", ()=>{
+					if (err) throw err;
+					res.send(JSON.stringify({"error": 0, "message": "Account Created"}));
+				});
+				
 			}
 		});
 	});	
-
 })
