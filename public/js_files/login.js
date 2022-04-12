@@ -9,12 +9,22 @@ document.getElementById("loginBtn").addEventListener("click", ()=>{
     document.getElementById("loginDiv").style.display = "block";
 });
 
-// pop up functionality
+// red
 var notification = document.getElementsByClassName("hover_bkgr_fricc")[0]
 var notificationText = document.getElementsByClassName("popupText")[0]
 
+// green
+var notification_corr = document.getElementsByClassName("hover_bkgr_fricc")[1]
+var notificationText_corr = document.getElementsByClassName("popupText")[1]
+//notification_corr.style.backgroundColor = "rgb(118, 221, 131)";
+
+
 document.getElementsByClassName("popupCloseButton")[0].addEventListener("click", ()=>{
     notification.style.display = "none";
+});
+
+document.getElementsByClassName("popupCloseButton")[1].addEventListener("click", ()=>{
+    notification_corr.style.display = "none";
 });
 
 
@@ -32,6 +42,7 @@ create.addEventListener("click", ()=>{
         // checks, too lazy to check spaces which could be an issue
         if (email=="" || password=="" || username=="" || !email.includes("@") || !email.includes(".")) {
             notificationText.innerHTML = "Invalid Email"
+            notification_corr.style.display = "none";
             notification.style.display = "inline";
             create.classList.remove("submitting");
         } else {
@@ -50,6 +61,17 @@ create.addEventListener("click", ()=>{
                 if (xhr.readyState == XMLHttpRequest.DONE) {
                     var accdata = JSON.parse(xhr.responseText);
                     console.log(accdata)
+
+                    // throw error
+                    if (accdata["error"]) {
+                        notificationText.innerHTML =  accdata["message"]
+                        notification_corr.style.display = "none";
+                        notification.style.display = "inline";
+                    } else {
+                        notificationText_corr.innerHTML =  accdata["message"]
+                        notification.style.display = "none";
+                        notification_corr.style.display = "inline";
+                    }
 
                     create.classList.remove("submitting");
                 }
@@ -93,6 +115,7 @@ login.addEventListener("click", ()=>{
                 if (accdata.length == 0) {
                     notificationText.innerHTML = "Incorrect Login"
                     notification.style.display = "inline";
+                    notification_corr.style.display = "none";
 
                 // correct login
                 } else {

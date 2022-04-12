@@ -198,6 +198,16 @@ body{
     height: 30px;
     text-align: center;
 }
+#greennoti {
+    background-color: rgb(118, 221, 131);
+}
+#greenbtn {
+    background-color: rgb(118, 221, 131);
+    border: 3px solid rgb(87, 160, 97);
+}
+#greenbtn:hover {
+    background-color: rgb(87, 160, 97);
+}
 .popupCloseButton:hover {
     background-color: rgb(179, 90, 90);
 }
