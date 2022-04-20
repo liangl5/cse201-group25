@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+
 <html>
     <head>
         <title>GitApps</title>
@@ -12,17 +13,20 @@
     </head>
     
     <body>
-
+        
+        <div id="greyoutDiv"></div>
         <div class="topnav">
             <img class ="logo1" src ="./imgs/logoT.png" alt="">
             <a id="homeNav" class="nav active">Home</a>
             <a id="aboutNav" class="nav notactive">About</a>
             <a id="contactNav" class="nav notactive">Contact</a>
 
-            <button id="loginBtn" onclick="window.location='login.html';">Login</button>
+            <button class="topBtn" id="loginBtn" onclick="window.location='login.html';">Login</button>
+            <button class="topBtn" id="logout">Sign Out</button>
 
             <button id="searchBtn">Enter</button>
             <input id="searchBar" type="text" placeholder="Search..">
+            
             
         </div>
 

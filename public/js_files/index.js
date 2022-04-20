@@ -1,5 +1,5 @@
-// grab the app data
-// connected to db
+
+// basic initialization
 globalAppData =  []
 
 var xhr = new XMLHttpRequest();
@@ -15,8 +15,52 @@ xhr.open('GET', '/loadApps', true);
 xhr.send(null);
 
 
+// login and out function
+document.getElementById("logout").addEventListener("click", ()=>{
+    eraseCookie("user_name");
+    renderLogin(false);
+    window.location.reload();
+});
 
 
+var test = getCookie("user_name");
+if (test==null) {
+    console.log("no login cookie");
+    renderLogin(false);
+} else {
+    console.log("yes login cookie")
+    renderLogin(true);
+}
+
+
+
+
+// how to deal with cookies
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+function eraseCookie(name) {   
+    document.cookie = name+'=; Max-Age=-99999999;';  
+}
+
+
+function renderLogin(isLoggedIn) {
+    if (isLoggedIn) {
+        document.getElementById("logout").style.display="inline";
+        document.getElementById("loginBtn").style.display="none";
+    } else {
+        document.getElementById("logout").style.display="none";
+        document.getElementById("loginBtn").style.display="inline";
+    }
+}
 
 
 // This part initally sets up event listeners to the nav bar and will correctly change color
@@ -81,7 +125,11 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
         displayHTML += "<div class='displayApps'>"
 
         // name
-        displayHTML += "<h3 class='left bottompadding'>" + displayApps[i]["AppName"] + "</h3>"
+        displayHTML += "<h3 class='middle bottompadding'>" + displayApps[i]["AppName"] + "</h3>"
+
+        // img
+        var converted =  displayApps[i]["AppName"].toLowerCase().replace(/ /g,"_");
+        displayHTML += '<img class="appImage" src="./imgs/' + converted + '.png" alt="' + converted + '">'
 
         // company name
         displayHTML += "<h4 class='left'>" + displayApps[i]["CompanyName"] + "</h4>"
@@ -100,9 +148,34 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
         displayHTML = "<p>No search results, try different keywords</p>"
     }
     document.getElementById("HomeDiv").innerHTML = displayHTML
+
+    addListenersToApps();
 })
 
 
+function addListenersToApps() {
+    var images = document.getElementsByClassName("appImage")
+    for (i = 0; i < images.length; i++) {
+        images[i].addEventListener("click", (e)=>{
+            renderClickableEntries(e.target.alt);
+        })
+    }
+}
+
+function renderClickableEntries(app) {
+
+    var div = document.getElementById("greyoutDiv")
+    div.style.display = "inline";
+    
+    displayHTML = '<img id="emphasizedImage" src="./imgs/' + app + '.png">'
+
+
+
+    div.innerHTML = displayHTML;
+}
 // Initialize the click
 // document.getElementById("searchBtn").click();
 
+document.getElementById("greyoutDiv").addEventListener("click", ()=>{
+    document.getElementById("greyoutDiv").style.display = "none";
+});

@@ -63,7 +63,7 @@ app.post('/login', function (req, res) {
 	  
 		con.query("USE GitApps;", ()=>{});
 	  
-		con.query("SELECT AccountID, isAdmin, isModerator FROM Accounts WHERE UserEmail = '"+email+"' && UserPassword = SHA2('" + password + "', 512);", function (err, result, fields) {
+		con.query("SELECT UserName, isAdmin, isModerator FROM Accounts WHERE UserEmail = '"+email+"' && UserPassword = SHA2('" + password + "', 512);", function (err, result, fields) {
 			if (err) throw err;
 			console.log(result)
 			res.send(JSON.stringify(result))
