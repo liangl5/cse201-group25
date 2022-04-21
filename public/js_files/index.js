@@ -167,15 +167,15 @@ function renderClickableEntries(app) {
     var div = document.getElementById("greyoutDiv")
     div.style.display = "inline";
     
-    displayHTML = '<img id="emphasizedImage" src="./imgs/' + app + '.png">'
+    document.getElementById("imageDiv").innerHTML = '<img id="emphasizedImage" src="./imgs/' + app + '.png">'
+
+    //document.getElementById("commentDiv").innerHTML = '<form action="/html/tags/html_form_tag_action.cfm" method="post"><div><textarea name="comments" id="comments" style="font-family:sans-serif;font-size:1.2em;">Hey... say something!</textarea></div><input type="submit" value="Submit"></form>'
 
 
-
-    div.innerHTML = displayHTML;
 }
 // Initialize the click
 // document.getElementById("searchBtn").click();
 
-document.getElementById("greyoutDiv").addEventListener("click", ()=>{
+document.getElementById("exitZoom").addEventListener("click", ()=>{
     document.getElementById("greyoutDiv").style.display = "none";
 });

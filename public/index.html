@@ -14,7 +14,21 @@
     
     <body>
         
-        <div id="greyoutDiv"></div>
+        <div id="greyoutDiv">
+            <button id="exitZoom">X</button>
+            <div id="imageDiv"></div>
+
+            <div id="commentDiv"></div>
+            <form action="/html/tags/html_form_tag_action.cfm" method="post">
+                <div>
+                <textarea name="comments" id="comments" style="font-family:sans-serif;font-size:1.2em;">
+                Hey... say something!
+                </textarea>
+                </div>
+                <input type="submit" value="Submit">
+                </form>
+        </div>
+
         <div class="topnav">
             <img class ="logo1" src ="./imgs/logoT.png" alt="">
             <a id="homeNav" class="nav active">Home</a>
