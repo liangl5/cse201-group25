@@ -11,6 +11,7 @@ function loadApps() {
 
             globalAppData = message["apps"];
             globalCommentData = message["comments"]
+            console.log(globalCommentData)
             document.getElementById("searchBtn").click();
         }
     }
@@ -32,6 +33,7 @@ document.getElementsByClassName("popupCloseButton")[0].addEventListener("click",
 // login and out function
 document.getElementById("logout").addEventListener("click", ()=>{
     eraseCookie("user_name");
+    eraseCookie("privilege");
     renderLogin(false);
     window.location.reload();
 });
@@ -44,6 +46,8 @@ if (test==null) {
     renderLogin(false, test);
 } else {
     console.log("yes login cookie")
+    var test2 = 
+
     renderLogin(true, test);
 }
 
@@ -72,12 +76,14 @@ function renderLogin(isLoggedIn, name) {
         document.getElementById("formNav").style.display="inline";
         document.getElementById("displayIGN").style.display="inline";
         document.getElementById("displayIGN").innerText = name;
+
     } else {
         document.getElementById("logout").style.display="none";
         document.getElementById("loginBtn").style.display="inline";
 
         document.getElementById("formNav").style.display="none";
         document.getElementById("displayIGN").style.display="none";
+
     }
 }
 
@@ -176,6 +182,8 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
     }
     document.getElementById("HomeDiv").innerHTML = displayHTML
 
+    
+
     // update value of display apps so we can know which display apps was clicked
     var appsDiv = document.getElementsByClassName("displayApps");
     var sizeBtn = document.getElementsByClassName("sizeChange");
@@ -196,13 +204,18 @@ function updateComments(appID) {
 
     for (j = 0; j < globalCommentData.length; j++) {
         if (globalCommentData[j].AppID == appID) {
-            displayHTML += "<div class='userName'>" + globalCommentData[j].UserName + " - " + globalCommentData[j].CommentDate.split("T")[0] + "</div>";
-            displayHTML += "<div class='comment'>'" + globalCommentData[j].Details + "'</div>";
+            displayHTML += "<div class='comment' id='comment" + globalCommentData[j].CommentID + "'>"
+            displayHTML += "<div class='commentHeader'>" + globalCommentData[j].UserName + " - " + globalCommentData[j].CommentDate.split("T")[0] + "</div>";
+            displayHTML += "<div class='commentDetails'>'" + globalCommentData[j].Details + "'</div>";
+            displayHTML += '<button class="commentDelete fa fa-trash" value="' + globalCommentData[j].AppID + ":" + globalCommentData[j].CommentID + '"></button>'
+            displayHTML += '</div>'
         }
     }
 
     displayHTML += '<textarea class="commentInput" id="commentInput' + appID + '" placeholder="Type your comment" rows="4" cols="50"></textarea>'
-    displayHTML += '<button class="commentSubmit" value="' + appID + '">Submit</button></div>'
+    displayHTML += '<button class="commentSubmit" value="' + appID + '">Submit</button>'
+    displayHTML += '</div>'
+
 
     return displayHTML
 }
@@ -210,6 +223,47 @@ function updateComments(appID) {
 
 // adds listeners 
 function addListenersToApps() {
+
+    // checks whether or not we should display the delete button
+    var deleteBtns = document.getElementsByClassName('commentDelete')
+    var tempswitch = "none";
+    if (getCookie('privilege')>0) {
+        tempswitch = "inline"
+        
+    } 
+    for (i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].style.display = tempswitch;
+        deleteBtns[i].addEventListener("click", (e)=>{
+            // delete comment
+            var proceed = confirm("Are you sure you want to proceed?");
+
+            if (proceed) {
+
+                var AppID = e.target.value.split(":")[0]
+                var CommentID = e.target.value.split(":")[1]
+
+
+                data = {"AppID": AppID, "CommentID":CommentID}
+
+                var xhr = new window.XMLHttpRequest()
+                xhr.open('POST', '/removeComment', true)
+                xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+                xhr.send(JSON.stringify(data))
+
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        var accdata = JSON.parse(xhr.responseText);
+                        if (accdata.error == 0) {
+                        
+                            updateNewComments(AppID)
+                        }
+                    }
+                }
+            }
+        });
+    }
+
 
     // listeners to the expand and shrink buttons
     var apps = document.getElementsByClassName("sizeChange")

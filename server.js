@@ -136,9 +136,32 @@ app.post('/addComment', function(req, res) {
 			});
 
 	});	
+});
 
 
-})
+app.post('/removeComment', function(req, res) {
+	var AppID = req.body.AppID
+	var CommentID = req.body.CommentID
+
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "password"
+	});
+
+
+	con.connect(function(err) {
+		if (err) throw err;
+	  
+		con.query("USE GitApps;", ()=>{});
+
+			con.query("DELETE FROM Comments WHERE AppID='" + AppID + "' AND CommentID='" + CommentID + "';", (err, results)=>{
+				if (err) throw err;
+				res.send(JSON.stringify({"error": 0, "message": "Comment Removed"}));
+			});
+
+	});	
+});
 
 app.post('/createAccount', function(req, res) {
 

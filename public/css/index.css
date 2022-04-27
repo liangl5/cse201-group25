@@ -202,12 +202,14 @@ html, body {
   display: none;
 }
 
+
 #displayIGN {
   float: right;
-  margin: 11px 10px 0 0px;
+  margin: 12.5px 10px 0 0px;
   display: none;
 }
 
+/* App Entry CSS */
 .sizeChange {
   position: relative;
   top: -395px;
@@ -231,7 +233,7 @@ html, body {
   background-color: rgb(228, 228, 228);
 }
 
-.comment {
+.commentDetails {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 30px;
@@ -241,7 +243,7 @@ html, body {
   max-width: 480px
 }
 
-.commentSection .userName {
+.commentSection .commentHeader {
   margin: 20px 0px 10px 0px;
 }
 
@@ -260,6 +262,7 @@ html, body {
 }
 
 
+/* Notification CSS */
 .hover_bkgr_fricc{
   cursor:pointer;
   display:none;
@@ -323,3 +326,15 @@ html, body {
   display: inline-block;
   font-weight: bold;
 }
+
+/* trash can button */
+
+.commentDelete{
+  position: relative;
+  top: -106px;
+  left: 220px;
+  display: none;
+  background-color: rgb(223, 113, 113);
+  border-color: rgb(223, 113, 113);
+}
+

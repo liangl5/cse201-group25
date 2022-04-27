@@ -120,12 +120,10 @@ login.addEventListener("click", ()=>{
                 // correct login
                 } else {
                     console.log(accdata)
-                    setCookie("user_name",accdata[0]['UserName'], 30); 
-                    var userEmail=getCookie("user_name");
-                    console.log(userEmail);
+                    setCookie("user_name", accdata[0]['UserName'], 30); 
+                    setCookie("privilege", accdata[0]['isAdmin']*2 + accdata[0]['isModerator'], 30); 
 
-
-                    window.location = "/"; // need to add cookie / login functionality
+                    window.location = "/"; 
                 }
 
                 login.classList.remove("submitting");
