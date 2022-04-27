@@ -26,10 +26,10 @@ document.getElementById("logout").addEventListener("click", ()=>{
 var test = getCookie("user_name");
 if (test==null) {
     console.log("no login cookie");
-    renderLogin(false);
+    renderLogin(false, test);
 } else {
     console.log("yes login cookie")
-    renderLogin(true);
+    renderLogin(true, test);
 }
 
 
@@ -52,13 +52,20 @@ function eraseCookie(name) {
 }
 
 
-function renderLogin(isLoggedIn) {
+function renderLogin(isLoggedIn, name) {
     if (isLoggedIn) {
         document.getElementById("logout").style.display="inline";
         document.getElementById("loginBtn").style.display="none";
+
+        document.getElementById("formNav").style.display="inline";
+        document.getElementById("displayIGN").style.display="inline";
+        document.getElementById("displayIGN").innerText = name;
     } else {
         document.getElementById("logout").style.display="none";
         document.getElementById("loginBtn").style.display="inline";
+
+        document.getElementById("formNav").style.display="none";
+        document.getElementById("displayIGN").style.display="none";
     }
 }
 
@@ -122,13 +129,14 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
     // inner html
     displayHTML = ""
     for (i = 0; i < displayApps.length; i++) {
+        var converted =  displayApps[i]["AppName"].toLowerCase().replace(/ /g,"_");
+
         displayHTML += "<div class='displayApps'>"
 
         // name
         displayHTML += "<h3 class='middle bottompadding'>" + displayApps[i]["AppName"] + "</h3>"
 
         // img
-        var converted =  displayApps[i]["AppName"].toLowerCase().replace(/ /g,"_");
         displayHTML += '<img class="appImage" src="./imgs/' + converted + '.png" alt="' + converted + '">'
 
         // company name
@@ -140,6 +148,9 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
         // description
         displayHTML += "<p class='left'>" + displayApps[i]["AppDescription"] + "</p>"
 
+        
+        // englarge / shrink button
+        displayHTML += "<button state='expand' class='sizeChange' value='" + converted + "'>&#129141;</button>"
         displayHTML += "</div>"
     }
 
@@ -149,33 +160,85 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
     }
     document.getElementById("HomeDiv").innerHTML = displayHTML
 
+    var appsDiv = document.getElementsByClassName("displayApps");
+    var sizeBtn = document.getElementsByClassName("sizeChange");
+    for (var i = 0; i < appsDiv.length; i++) {
+        appsDiv[i].value = displayApps[i]["AppName"].toLowerCase().replace(/ /g,"_");
+        sizeBtn[i].state = "expand"
+    }
+
     addListenersToApps();
-})
+});
 
 
+// allows for the shrink and expansion of app entries
 function addListenersToApps() {
-    var images = document.getElementsByClassName("appImage")
-    for (i = 0; i < images.length; i++) {
-        images[i].addEventListener("click", (e)=>{
-            renderClickableEntries(e.target.alt);
+    var apps = document.getElementsByClassName("sizeChange")
+    for (i = 0; i < apps.length; i++) {
+        apps[i].addEventListener("click", (e)=>{
+            console.log("click", e.target.state)
+            // expand
+            if (e.target.state == "expand") {
+                e.target.innerHTML = "&#129143;";
+                e.target.state = "shrink"
+                expand(e.target.value, true);
+                
+            } else {
+                e.target.innerHTML = "&#129141;";
+                e.target.state = "expand"
+                expand(e.target.value, false);
+            }
+            
         })
     }
 }
 
-function renderClickableEntries(app) {
+// expands the app entries for comments
+function expand(target, enlarge) {
 
-    var div = document.getElementById("greyoutDiv")
-    div.style.display = "inline";
-    
-    document.getElementById("imageDiv").innerHTML = '<img id="emphasizedImage" src="./imgs/' + app + '.png">'
+    var apps = document.getElementsByClassName("displayApps")
+    var commentSection = document.getElementsByClassName("commentSections")
+    for (i = 0; i < apps.length; i++) {
+        if (apps[i].value == target) {
+            
+            if (enlarge) {
+                apps[i].classList.add("expand");
+                commentSection[i].style.display = "inline";
+            } else {
+                apps[i].classList.remove("expand");
+                commentSection[i].style.display = "hidden";
+            }
 
-    //document.getElementById("commentDiv").innerHTML = '<form action="/html/tags/html_form_tag_action.cfm" method="post"><div><textarea name="comments" id="comments" style="font-family:sans-serif;font-size:1.2em;">Hey... say something!</textarea></div><input type="submit" value="Submit"></form>'
-
-
+        }
+    }
 }
-// Initialize the click
-// document.getElementById("searchBtn").click();
 
-document.getElementById("exitZoom").addEventListener("click", ()=>{
-    document.getElementById("greyoutDiv").style.display = "none";
-});
+
+// greyout div functionality
+
+// function addListenersToApps() {
+//     var images = document.getElementsByClassName("appImage")
+//     for (i = 0; i < images.length; i++) {
+//         images[i].addEventListener("click", (e)=>{
+//             renderClickableEntries(e.target.alt);
+//         })
+//     }
+// }
+
+// function renderClickableEntries(app) {
+
+//     var div = document.getElementById("greyoutDiv")
+//     div.style.display = "inline";
+    
+//     document.getElementById("imageDiv").innerHTML = '<img id="emphasizedImage" src="./imgs/' + app + '.png">'
+
+//     //document.getElementById("commentDiv").innerHTML = '<form action="/html/tags/html_form_tag_action.cfm" method="post"><div><textarea name="comments" id="comments" style="font-family:sans-serif;font-size:1.2em;">Hey... say something!</textarea></div><input type="submit" value="Submit"></form>'
+
+
+// }
+// // Initialize the click
+// // document.getElementById("searchBtn").click();
+
+// document.getElementById("exitZoom").addEventListener("click", ()=>{
+//     document.getElementById("greyoutDiv").style.display = "none";
+// });
