@@ -282,6 +282,8 @@ function updateNewComments(appID) {
             globalCommentData = message["comments"]
 
             document.getElementById("commentSection" + appID).innerHTML = updateComments(appID)
+
+            addListenersToApps()
         }
     }
 
