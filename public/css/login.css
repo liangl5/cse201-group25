@@ -127,6 +127,7 @@ body{
     border-color: rgb(65, 61, 61);  
     color:white;
     font: 500 1rem 'Roboto Slab', serif;
+    border-radius: 5px;
   }
 
 

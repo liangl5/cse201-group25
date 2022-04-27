@@ -35,7 +35,7 @@
             <a id="homeNav" class="nav active">Home</a>
             <a id="aboutNav" class="nav notactive">About</a>
             <a id="contactNav" class="nav notactive">Contact</a>
-            <a id="formNav" class="nav notactive">Form</a>
+            <a id="formNav" class="nav notactive">Submission</a>
 
             <button class="topBtn" id="loginBtn" onclick="window.location='login.html';">Login</button>
             <button class="topBtn" id="logout">Sign Out</button>
@@ -58,6 +58,14 @@
             <span class="helper"></span>
             <div>
                 <div class="popupCloseButton">&times;</div>
+                <div class="popupText">Placeholder</div>
+            </div>
+        </div>
+
+        <div class="hover_bkgr_fricc">
+            <span class="helper"></span>
+            <div id="greennoti">
+                <div class="popupCloseButton" id="greenbtn">&times;</div>
                 <div class="popupText">Placeholder</div>
             </div>
         </div>
@@ -85,8 +93,29 @@
                 <a href = "mailto: winkhaca@miamioh.edu">winkhaca@miamioh.edu</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<a href = "mailto: zigmonsg@miamioh.edu">zigmonsg@miamioh.edu</a></p>
         </div>
 
-        <div class="display" id="FormDiv">
-            form stuff
+        <div class="display" id="SubmissionDiv">
+                            
+            <div class="left-align">Name of App</div>
+            <textarea class="feedback-input" id="AppName" rows="1" cols="20"></textarea>
+
+            <div class="left-align">Name of Company</div>
+            <textarea class="feedback-input" id="AppCompany" rows="1" cols="20"></textarea>
+
+            <div class="left-align">Category</div>
+            <textarea class="feedback-input" id="AppCategory" rows="1" cols="20"></textarea>
+
+            <div class="left-align">Description</div>
+            <textarea class="feedback-input" id="AppDescription" rows="4" cols="40"></textarea>
+
+            <br>
+
+            <label class="left-align" for="submissionLogo">Upload an Image:</label>
+            <input type="file"
+                id="submissionLogo" name="submissionLogo"
+                accept="image/png, image/jpeg">
+            <br>
+            <button id="submitSubmission"> SUBMIT</button>
+            
         </div>
 
     </body>

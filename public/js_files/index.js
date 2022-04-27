@@ -30,6 +30,13 @@ document.getElementsByClassName("popupCloseButton")[0].addEventListener("click",
     notification.style.display = "none";
 });
 
+var notification_corr = document.getElementsByClassName("hover_bkgr_fricc")[1]
+var notificationText_corr = document.getElementsByClassName("popupText")[1]
+document.getElementsByClassName("popupCloseButton")[1].addEventListener("click", ()=>{
+    notification_corr.style.display = "none";
+});
+
+
 // login and out function
 document.getElementById("logout").addEventListener("click", ()=>{
     eraseCookie("user_name");
@@ -365,33 +372,24 @@ function expand(target, enlarge) {
 }
 
 
-// greyout div functionality
+document.getElementById("submitSubmission").addEventListener("click", ()=>{
 
-// function addListenersToApps() {
-//     var images = document.getElementsByClassName("appImage")
-//     for (i = 0; i < images.length; i++) {
-//         images[i].addEventListener("click", (e)=>{
-//             renderClickableEntries(e.target.alt);
-//         })
-//     }
-// }
+    var name = document.getElementById("AppName").value
+    var company = document.getElementById("AppCompany").value
+    var category = document.getElementById("AppCategory").value
+    var description = document.getElementById("AppDescription").value
+    var images = document.getElementById("submissionLogo").files
 
-// function renderClickableEntries(app) {
+    if (name.replace(/\s/g, '') == "" || company.replace(/\s/g, '') == "" || category.replace(/\s/g, '') == "" || description.replace(/\s/g, '') == "" || images.length == 0) {
+        notificationText.innerHTML = "Invalid Submission"
+        notification.style.display = "inline";
+    } else {
 
-//     var div = document.getElementById("greyoutDiv")
-//     div.style.display = "inline";
-    
-//     document.getElementById("imageDiv").innerHTML = '<img id="emphasizedImage" src="./imgs/' + app + '.png">'
+        
 
-//     //document.getElementById("commentDiv").innerHTML = '<form action="/html/tags/html_form_tag_action.cfm" method="post"><div><textarea name="comments" id="comments" style="font-family:sans-serif;font-size:1.2em;">Hey... say something!</textarea></div><input type="submit" value="Submit"></form>'
-
-
-// }
-// // Initialize the click
-// // document.getElementById("searchBtn").click();
-
-// document.getElementById("exitZoom").addEventListener("click", ()=>{
-//     document.getElementById("greyoutDiv").style.display = "none";
-// });
+        notificationText_corr.innerHTML = "Sucessful Submission"
+        notification_corr.style.display = "inline";
+    }
+});
 
 
