@@ -1,4 +1,6 @@
 # Group 25
+Installation Instructions
+https://docs.google.com/document/d/1_LciKn3coQOPdeYMs_GHF_Wnphq2L6QRZFNRs8l2Esw/edit?usp=sharing
 
 # The Team:
    - Hane Kaiser
