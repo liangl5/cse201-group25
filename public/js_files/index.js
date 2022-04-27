@@ -1,19 +1,33 @@
-
 // basic initialization
-globalAppData =  []
+globalAppData = []
+globalCommentData = []
 
-var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() {
-    if (xhr.readyState == XMLHttpRequest.DONE) {
-        var message = JSON.parse(xhr.responseText);
 
-        globalAppData = message["apps"];
-        document.getElementById("searchBtn").click();
+function loadApps() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            var message = JSON.parse(xhr.responseText);
+
+            globalAppData = message["apps"];
+            globalCommentData = message["comments"]
+            document.getElementById("searchBtn").click();
+        }
     }
-}
-xhr.open('GET', '/loadApps', true);
-xhr.send(null);
 
+    xhr.open('GET', '/loadApps', true);
+    xhr.send(null);
+}
+loadApps();
+
+
+
+// notification setup
+var notification = document.getElementsByClassName("hover_bkgr_fricc")[0]
+var notificationText = document.getElementsByClassName("popupText")[0]
+document.getElementsByClassName("popupCloseButton")[0].addEventListener("click", ()=>{
+    notification.style.display = "none";
+});
 
 // login and out function
 document.getElementById("logout").addEventListener("click", ()=>{
@@ -23,6 +37,7 @@ document.getElementById("logout").addEventListener("click", ()=>{
 });
 
 
+// check for login cookie
 var test = getCookie("user_name");
 if (test==null) {
     console.log("no login cookie");
@@ -31,9 +46,6 @@ if (test==null) {
     console.log("yes login cookie")
     renderLogin(true, test);
 }
-
-
-
 
 // how to deal with cookies
 function getCookie(name) {
@@ -149,8 +161,12 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
         displayHTML += "<p class='left'>" + displayApps[i]["AppDescription"] + "</p>"
 
         
-        // englarge / shrink button
-        displayHTML += "<button state='expand' class='sizeChange' value='" + converted + "'>&#129141;</button>"
+        // enlarge / shrink button
+        displayHTML += "<button state='expand' class='sizeChange' value='" + displayApps[i]["AppID"] + "'>&#129141;</button>"
+
+        // comments        
+        displayHTML += "<div class='commentSection' id='commentSection" + displayApps[i]["AppID"] + "'>" + updateComments(displayApps[i]["AppID"]) + "</div>"
+
         displayHTML += "</div>"
     }
 
@@ -160,19 +176,42 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
     }
     document.getElementById("HomeDiv").innerHTML = displayHTML
 
+    // update value of display apps so we can know which display apps was clicked
     var appsDiv = document.getElementsByClassName("displayApps");
     var sizeBtn = document.getElementsByClassName("sizeChange");
+    var commentSection = document.getElementsByClassName("commentSection");
     for (var i = 0; i < appsDiv.length; i++) {
-        appsDiv[i].value = displayApps[i]["AppName"].toLowerCase().replace(/ /g,"_");
+        appsDiv[i].value = displayApps[i]["AppID"]
         sizeBtn[i].state = "expand"
+        commentSection.value = displayApps[i]["AppID"]
     }
 
     addListenersToApps();
 });
 
+// creates the commentSection
+function updateComments(appID) {
 
-// allows for the shrink and expansion of app entries
+    displayHTML = "<h3>Comments</h3><div class='commentBorder'>"
+
+    for (j = 0; j < globalCommentData.length; j++) {
+        if (globalCommentData[j].AppID == appID) {
+            displayHTML += "<div class='userName'>" + globalCommentData[j].UserName + " - " + globalCommentData[j].CommentDate.split("T")[0] + "</div>";
+            displayHTML += "<div class='comment'>'" + globalCommentData[j].Details + "'</div>";
+        }
+    }
+
+    displayHTML += '<textarea class="commentInput" id="commentInput' + appID + '" placeholder="Type your comment" rows="4" cols="50"></textarea>'
+    displayHTML += '<button class="commentSubmit" value="' + appID + '">Submit</button></div>'
+
+    return displayHTML
+}
+
+
+// adds listeners 
 function addListenersToApps() {
+
+    // listeners to the expand and shrink buttons
     var apps = document.getElementsByClassName("sizeChange")
     for (i = 0; i < apps.length; i++) {
         apps[i].addEventListener("click", (e)=>{
@@ -191,22 +230,78 @@ function addListenersToApps() {
             
         })
     }
+
+    // listeners to submit comment buttons
+    var commentBtns = document.getElementsByClassName("commentSubmit")
+    for (i = 0; i < commentBtns.length; i++) {
+        commentBtns[i].addEventListener("click", (e)=>{
+
+            // check to make sure valid comment
+            if (document.getElementById("commentInput" + e.target.value).value.replace(/\s/g, '') == "") {
+                notificationText.innerHTML = "Invalid Comment"
+                notification.style.display = "inline";
+            } else {
+                // first check if there is a login cookie, otherwise we can't comment
+                var test = getCookie("user_name");
+                if (test==null) {
+                    notificationText.innerHTML = "Login to comment"
+                    notification.style.display = "inline";
+                } else {
+                    // make request here
+                    var comment = document.getElementById("commentInput" + e.target.value).value
+
+                    data = {"appID": e.target.value, "userName":test, "comment":comment}
+
+                    var xhr = new window.XMLHttpRequest()
+                    xhr.open('POST', '/addComment', true)
+                    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+                    xhr.send(JSON.stringify(data))
+
+
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == XMLHttpRequest.DONE) {
+                            var accdata = JSON.parse(xhr.responseText);
+                            if (accdata.error == 0) {
+
+                                updateNewComments(e.target.value)
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// separate load comment data in the case of adding a new comment
+function updateNewComments(appID) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            var message = JSON.parse(xhr.responseText);
+            globalCommentData = message["comments"]
+
+            document.getElementById("commentSection" + appID).innerHTML = updateComments(appID)
+        }
+    }
+
+    xhr.open('GET', '/loadComments', true);
+    xhr.send(null);
 }
 
 // expands the app entries for comments
 function expand(target, enlarge) {
 
     var apps = document.getElementsByClassName("displayApps")
-    var commentSection = document.getElementsByClassName("commentSections")
+    var commentSection = document.getElementsByClassName("commentSection")
     for (i = 0; i < apps.length; i++) {
         if (apps[i].value == target) {
-            
             if (enlarge) {
                 apps[i].classList.add("expand");
                 commentSection[i].style.display = "inline";
             } else {
                 apps[i].classList.remove("expand");
-                commentSection[i].style.display = "hidden";
+                commentSection[i].style.display = "none";
             }
 
         }
@@ -242,3 +337,5 @@ function expand(target, enlarge) {
 // document.getElementById("exitZoom").addEventListener("click", ()=>{
 //     document.getElementById("greyoutDiv").style.display = "none";
 // });
+
+

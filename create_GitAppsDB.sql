@@ -55,7 +55,7 @@ CREATE TABLE Apps(
 /****** Object:  Table Comments  ******/   
 CREATE TABLE Comments(
 	CommentID	 			int 	PRIMARY KEY 	NOT NULL AUTO_INCREMENT,
-	AccountID			INT					NOT NULL			REFERENCES Accounts(AccountID),
+	UserName			nvarchar(30)					NOT NULL			REFERENCES Accounts(UserName),
 	AppID				INT					NOT NULL			REFERENCES Apps(AppID),
 	CommentDate		 	DATE 				NOT NULL,
 	LikeCount			INT					NULL,
@@ -94,10 +94,11 @@ INSERT INTO Apps(AppName, CompanyName, Category, AppDescription) VALUES
 	('Raid Shadow Legends', 'Gamers International', 'Games', 'Bet you never saw one of our ads'),
 	('Minecraft', 'Mojang', 'Games', 'The best mining game');
 
-INSERT INTO Comments(AccountID, AppID, CommentDate, LikeCount, DislikeCount, Details) VALUES
-	(2, 1, '2022-3-2', 20, 3, 'I almost got kidnapped while using this app, kinda sketch'),
-	(1, 2, '2022-3-2', 4, 18, 'Trivago has quick service'),
-	(4, 3, '2022-3-2', 200, 0, 'Good app'),
-	(1, 4, '2022-3-2', 30, 2, '10/10, would recommend again');
+INSERT INTO Comments(UserName, AppID, CommentDate, LikeCount, DislikeCount, Details) VALUES
+	('ted', 1, '2022-3-2', 20, 3, 'I almost got kidnapped while using this app, kinda sketch'),
+	('liang', 1, '2022-3-2', 20, 3, 'Decent Service'),
+	('liang', 2, '2022-3-2', 4, 18, 'Trivago has quick service'),
+	('fred', 3, '2022-3-2', 200, 0, 'Good app'),
+	('jeb', 4, '2022-3-2', 30, 2, '10/10, would recommend again');
 
 /*UPDATE Accounts SET UserPassword = SHA2(UserPassword)*/

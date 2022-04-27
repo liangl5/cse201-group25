@@ -32,15 +32,49 @@ app.get('/loadApps',function(req,res) {
 		con.query("SELECT * FROM Apps;", function (err, result, fields) {
 			if (err) throw err;
 
-			var dataToSendToClient = {'apps': result};
+			con.query("SELECT * FROM Comments", function(com_err, com_result, com_fields) {
+				if(com_err) throw com_err;
+
+				var dataToSendToClient = {'apps': result, 'comments' : com_result};
+				// convert whatever we want to send (preferably should be an object) to JSON
+				var JSONdata = JSON.stringify(dataToSendToClient);
+				console.log(JSONdata);
+
+				res.send(JSONdata);
+			});
+			
+		});
+	});		  
+});
+
+app.get('/loadComments',function(req,res) {
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "password"
+	});
+
+	con.connect(function(err) {
+		if (err) throw err;
+		console.log("Connected!");
+	  
+		con.query("USE GitApps;", ()=>{});
+
+		con.query("SELECT * FROM Comments", function(com_err, com_result, com_fields) {
+			if(com_err) throw com_err;
+
+			var dataToSendToClient = {'comments' : com_result};
 			// convert whatever we want to send (preferably should be an object) to JSON
 			var JSONdata = JSON.stringify(dataToSendToClient);
 			console.log(JSONdata);
 
 			res.send(JSONdata);
 		});
+
 	});		  
 });
+
+
 
 var bodyParser = require('body-parser')
 
@@ -72,6 +106,39 @@ app.post('/login', function (req, res) {
 })
 
 
+app.post('/addComment', function(req, res) {
+	var appID = req.body.appID
+	var username = req.body.userName
+	var text = req.body.comment
+
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "password"
+	});
+
+
+	con.connect(function(err) {
+		if (err) throw err;
+	  
+		con.query("USE GitApps;", ()=>{});
+	  
+
+			var today = new Date();
+			var dd = String(today.getDate()).padStart(2, '0');
+			var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+			var yyyy = today.getFullYear();
+			today = yyyy+'-'+mm+'-'+dd;
+
+			con.query("INSERT INTO Comments(UserName, AppID, CommentDate, Details) VALUES ('" + username + "', " + appID + ", '" + today + "', '" + text + "');", (err, results)=>{
+				if (err) throw err;
+				res.send(JSON.stringify({"error": 0, "message": "Comment Added"}));
+			});
+
+	});	
+
+
+})
 
 app.post('/createAccount', function(req, res) {
 
