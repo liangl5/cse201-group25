@@ -49,7 +49,8 @@ CREATE TABLE Apps(
 	AppName 			nvarchar(30) 			NOT NULL,
 	CompanyName 		nVARCHAR(60) 		NOT NULL,
 	Category 			nvarchar(30) 		NULL,
-	AppDescription 		nVARCHAR(255) 		NULL
+	AppDescription 		nVARCHAR(255) 		NULL,
+	Display				BOOLEAN 			DEFAULT false
 );
 
 /****** Object:  Table Comments  ******/   
@@ -88,11 +89,11 @@ INSERT INTO Accounts(UserName, UserEmail, UserPassword, DateCreated, UserBio, is
    	('fred', 'fred@miamioh.ed', 	SHA2('mod', 512), '2022-2-5', "Temp", true),
    	('jeb', 'jeb@miamioh.edu', 		SHA2('mod', 512), '2022-2-5', "Temp", true);
 
-INSERT INTO Apps(AppName, CompanyName, Category, AppDescription) VALUES
-	('Uber', 'Uber Technologies', 'Travel', 'Peer-to-peer ridesharing and food delivery platform'),
-	('Trivago', 'Trivago Inc', 'Travel', 'Hotel: Trivago'),
-	('Raid Shadow Legends', 'Gamers International', 'Games', 'Bet you never saw one of our ads'),
-	('Minecraft', 'Mojang', 'Games', 'The best mining game');
+INSERT INTO Apps(AppName, CompanyName, Category, AppDescription, Display) VALUES
+	('Uber', 'Uber Technologies', 'Travel', 'Peer-to-peer ridesharing and food delivery platform', true),
+	('Trivago', 'Trivago Inc', 'Travel', 'Hotel: Trivago', true),
+	('Raid Shadow Legends', 'Gamers International', 'Games', 'Bet you never saw one of our ads', true),
+	('Minecraft', 'Mojang', 'Games', 'The best mining game', true);
 
 INSERT INTO Comments(UserName, AppID, CommentDate, LikeCount, DislikeCount, Details) VALUES
 	('ted', 1, '2022-3-2', 20, 3, 'I almost got kidnapped while using this app, kinda sketch'),

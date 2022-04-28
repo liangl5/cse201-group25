@@ -29,7 +29,7 @@ app.get('/loadApps',function(req,res) {
 	  
 		con.query("USE GitApps;", ()=>{});
 	  
-		con.query("SELECT * FROM Apps;", function (err, result, fields) {
+		con.query("SELECT * FROM Apps WHERE Display = 1;", function (err, result, fields) {
 			if (err) throw err;
 
 			con.query("SELECT * FROM Comments", function(com_err, com_result, com_fields) {
@@ -181,7 +181,6 @@ app.post('/createAccount', function(req, res) {
 	  
 		con.query("USE GitApps;", ()=>{});
 	  
-		var senddata = ""
 		// first query to make sure username and email are not already in use
 		con.query("SELECT COUNT(*) from Accounts WHERE UserEmail = '"+email+"' || UserName = '" + username + "';", function (err, result, fields) {
 			if (err) throw err;
@@ -205,3 +204,43 @@ app.post('/createAccount', function(req, res) {
 		});
 	});	
 })
+
+
+var formidable = require('formidable');
+
+app.post('/addApp', function(req, res) {
+	// data = {"name": name, "company": company, "category": category, "description": description}
+	var name = req.body.name
+	var company = req.body.company;
+	var category = req.body.category;
+	var description = req.body.description;
+	
+	var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+      res.write('File uploaded');
+      res.end();
+    });
+
+
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "password"
+	});
+
+
+	con.connect(function(err) {
+		if (err) throw err;
+	  
+		con.query("USE GitApps;", ()=>{});
+	  
+			con.query("INSERT INTO Apps(AppName, CompanyName, Category, AppDescription) VALUES ('" + name + "', '" + company + "', '" + category + "', '" + description + "');", (err, results)=>{
+				if (err) throw err;
+
+				//const path = __dirname + '/public/imgs/' + name.toLowerCase().replace(/ /g,"_"); + ".png"
+				//Image.mv()
+				res.send(JSON.stringify({"error": 0, "message": "App Added"}));
+			});
+
+	});	
+});

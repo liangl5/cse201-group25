@@ -53,8 +53,11 @@ if (test==null) {
     renderLogin(false, test);
 } else {
     console.log("yes login cookie")
-    var test2 = 
 
+    if (getCookie("privilege") == 2) {
+        console.log("is admin")
+        document.getElementById("adminPrivileges").style.display = "inline"
+    }
     renderLogin(true, test);
 }
 
@@ -90,7 +93,6 @@ function renderLogin(isLoggedIn, name) {
 
         document.getElementById("formNav").style.display="none";
         document.getElementById("displayIGN").style.display="none";
-
     }
 }
 
@@ -385,10 +387,27 @@ document.getElementById("submitSubmission").addEventListener("click", ()=>{
         notification.style.display = "inline";
     } else {
 
-        
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                var message = JSON.parse(xhr.responseText);
 
-        notificationText_corr.innerHTML = "Sucessful Submission"
-        notification_corr.style.display = "inline";
+                if (message.error == 0) {
+                    console.log("added successfully")
+                    notificationText_corr.innerHTML = "Sucessful Submission"
+                    notification_corr.style.display = "inline";
+                }
+                
+            }
+        }
+        console.log(images[0])
+
+        data = {"name": name, "company": company, "category": category, "description": description}
+        xhr.open('POST', '/addApp', true)
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+        xhr.send(JSON.stringify(data))
+
+        
     }
 });
 

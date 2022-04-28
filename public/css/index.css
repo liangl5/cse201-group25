@@ -398,3 +398,8 @@ html, body {
   padding-bottom: 15px;
   margin-left: 10px;
 }
+
+/* show accept / deny forms */
+#adminPrivileges {
+  display: none;
+}
