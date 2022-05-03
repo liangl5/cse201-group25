@@ -1,25 +1,27 @@
 // basic initialization
 globalAppData = []
 globalCommentData = []
+globalPendingApps = []
 
 
-function loadApps() {
+function loadEverything() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             var message = JSON.parse(xhr.responseText);
 
             globalAppData = message["apps"];
-            globalCommentData = message["comments"]
+            globalCommentData = message["comments"];
+            globalPendingApps = message["pendingapps"]
             console.log(globalCommentData)
             document.getElementById("searchBtn").click();
         }
     }
 
-    xhr.open('GET', '/loadApps', true);
+    xhr.open('GET', '/loadEverything', true);
     xhr.send(null);
 }
-loadApps();
+loadEverything();
 
 
 
@@ -56,6 +58,10 @@ if (test==null) {
 
     if (getCookie("privilege") == 2) {
         console.log("is admin")
+
+        // render the admin accept forms
+        document.getElementById("")
+
         document.getElementById("adminPrivileges").style.display = "inline"
     }
     renderLogin(true, test);
@@ -275,24 +281,7 @@ function addListenersToApps() {
 
 
     // listeners to the expand and shrink buttons
-    var apps = document.getElementsByClassName("sizeChange")
-    for (i = 0; i < apps.length; i++) {
-        apps[i].addEventListener("click", (e)=>{
-            console.log("click", e.target.state)
-            // expand
-            if (e.target.state == "expand") {
-                e.target.innerHTML = "&#129143;";
-                e.target.state = "shrink"
-                expand(e.target.value, true);
-                
-            } else {
-                e.target.innerHTML = "&#129141;";
-                e.target.state = "expand"
-                expand(e.target.value, false);
-            }
-            
-        })
-    }
+    addListenersToShrinkBtn();
 
     // listeners to submit comment buttons
     var commentBtns = document.getElementsByClassName("commentSubmit")
@@ -327,6 +316,8 @@ function addListenersToApps() {
                             if (accdata.error == 0) {
 
                                 updateNewComments(e.target.value)
+                                addListenersToApps()
+                                addListenersToShrinkBtn();
                             }
                         }
                     }
@@ -335,6 +326,7 @@ function addListenersToApps() {
         });
     }
 }
+
 
 // separate load comment data in the case of adding a new comment
 function updateNewComments(appID) {
@@ -347,11 +339,36 @@ function updateNewComments(appID) {
             document.getElementById("commentSection" + appID).innerHTML = updateComments(appID)
 
             addListenersToApps()
+            addListenersToShrinkBtn()
         }
     }
 
     xhr.open('GET', '/loadComments', true);
     xhr.send(null);
+}
+
+
+
+// bug where shrink doesn't work after comment deleting / submission, therefore have to re add listeners
+function addListenersToShrinkBtn() {
+    var apps = document.getElementsByClassName("sizeChange")
+    for (i = 0; i < apps.length; i++) {
+        apps[i].addEventListener("click", (e)=>{
+            console.log("click", e.target.state)
+            // expand
+            if (e.target.state == "expand") {
+                e.target.innerHTML = "&#129143;";
+                e.target.state = "shrink"
+                expand(e.target.value, true);
+                
+            } else {
+                e.target.innerHTML = "&#129141;";
+                e.target.state = "expand"
+                expand(e.target.value, false);
+            }
+            
+        })
+    }
 }
 
 // expands the app entries for comments
@@ -374,41 +391,54 @@ function expand(target, enlarge) {
 }
 
 
-document.getElementById("submitSubmission").addEventListener("click", ()=>{
 
+document.getElementById("frmUploader").addEventListener("submit", formSubmit);
+
+function formSubmit(event) {
+    event.preventDefault();
     var name = document.getElementById("AppName").value
     var company = document.getElementById("AppCompany").value
     var category = document.getElementById("AppCategory").value
     var description = document.getElementById("AppDescription").value
-    var images = document.getElementById("submissionLogo").files
 
-    if (name.replace(/\s/g, '') == "" || company.replace(/\s/g, '') == "" || category.replace(/\s/g, '') == "" || description.replace(/\s/g, '') == "" || images.length == 0) {
+    if (name.replace(/\s/g, '') == "" || company.replace(/\s/g, '') == "" || category.replace(/\s/g, '') == "" || description.replace(/\s/g, '') == "") {
         notificationText.innerHTML = "Invalid Submission"
         notification.style.display = "inline";
     } else {
 
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == XMLHttpRequest.DONE) {
-                var message = JSON.parse(xhr.responseText);
 
-                if (message.error == 0) {
-                    console.log("added successfully")
-                    notificationText_corr.innerHTML = "Sucessful Submission"
-                    notification_corr.style.display = "inline";
-                }
+        var request = new XMLHttpRequest();
+        request.open('POST', "/upload", true);
+        request.onload = function() { // request successful
+            // we can use server response to our request now
+            var upload_message = JSON.parse(request.responseText);
+            console.log(upload_message["message"])
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    var message = JSON.parse(xhr.responseText);
+
+                    if (message.error == 0) {
+                        console.log("added successfully")
+                        notificationText_corr.innerHTML = "Sucessful Submission"
+                        notification_corr.style.display = "inline";
+                    }
                 
+                }
             }
-        }
-        console.log(images[0])
 
-        data = {"name": name, "company": company, "category": category, "description": description}
-        xhr.open('POST', '/addApp', true)
-        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-        xhr.send(JSON.stringify(data))
+            data = {"name": name, "company": company, "category": category, "description": description, "filename":upload_message["filename"]}
+            xhr.open('POST', '/addApp', true)
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+            xhr.send(JSON.stringify(data))
 
-        
+        };
+ 
+        request.onerror = function() {
+            // request failed
+        };
+ 
+        request.send(new FormData(event.target)); // create FormData from form that triggered event
     }
-});
-
-
+}

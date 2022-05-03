@@ -111,11 +111,10 @@
             <br>
 
             <label class="left-align" for="submissionLogo">Upload an Image:</label>
-            <input type="file"
-                id="submissionLogo" name="submissionLogo"
-                accept="image/png, image/jpeg">
-            <br>
-            <button id="submitSubmission"> SUBMIT</button>
+
+            <form id="frmUploader">
+                <input type="file" name="imgUploader" multiple />
+                <input type="submit" name="submit" id="submitSubmission" value="Upload" /> </form>
             
             <div id="adminPrivileges">
                 You are admin, therefore fort knight

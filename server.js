@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var path = require('path');
 var express = require('express');
+var multer = require('multer');
 var app = express();
 
 var htmlPath = path.join(__dirname, 'public');
@@ -16,7 +17,7 @@ var server = app.listen(8000, function () {
 
 
 // querys the database to get app data
-app.get('/loadApps',function(req,res) {
+app.get('/loadEverything',function(req,res) {
 	var con = mysql.createConnection({
 		host: "localhost",
 		user: "root",
@@ -35,13 +36,49 @@ app.get('/loadApps',function(req,res) {
 			con.query("SELECT * FROM Comments", function(com_err, com_result, com_fields) {
 				if(com_err) throw com_err;
 
-				var dataToSendToClient = {'apps': result, 'comments' : com_result};
+				con.query("SELECT * FROM Apps WHERE Display = 0", function(pending_err, pending_results, pending_fields) {
+					if(pending_err) throw pending_err;
+
+					var dataToSendToClient = {'apps': result, 'comments' : com_result, "pendingapps":pending_results};
+					// convert whatever we want to send (preferably should be an object) to JSON
+					var JSONdata = JSON.stringify(dataToSendToClient);
+					console.log(JSONdata);
+
+					res.send(JSONdata);
+				});
+			});
+			
+		});
+	});		  
+});
+
+app.get('/loadApps',function(req,res) {
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "password"
+	});
+
+	con.connect(function(err) {
+		if (err) throw err;
+		console.log("Connected!");
+	  
+		con.query("USE GitApps;", ()=>{});
+	  
+		con.query("SELECT * FROM Apps WHERE Display = 1;", function (err, result, fields) {
+			if (err) throw err;
+
+
+			con.query("SELECT * FROM Apps WHERE Display = 0", function(pending_err, pending_results, pending_fields) {
+				if(pending_err) throw pending_err;
+				var dataToSendToClient = {'apps': result, "pendingapps":pending_results};
 				// convert whatever we want to send (preferably should be an object) to JSON
 				var JSONdata = JSON.stringify(dataToSendToClient);
+				
 				console.log(JSONdata);
-
 				res.send(JSONdata);
 			});
+
 			
 		});
 	});		  
@@ -206,7 +243,30 @@ app.post('/createAccount', function(req, res) {
 })
 
 
-var formidable = require('formidable');
+var Storage = multer.diskStorage({
+	destination: function(req, file, callback) {
+		callback(null, "./public/imgs");
+	},
+	filename: function(req, file, callback) {
+		callback(null, file.originalname);
+	}
+});
+
+var upload = multer({
+	storage: Storage
+}).array("imgUploader", 1); //Field name and max count
+
+app.post("/upload", function(req, res) {
+	upload(req, res, function(err) {
+		if (err) {
+			console.log(err);
+			return res.end("Something went wrong!");
+			
+		}
+		return res.end(JSON.stringify({"error":0, "message":"File successfully uploaded", "filename":req.files[0].originalname}));
+	});
+});
+
 
 app.post('/addApp', function(req, res) {
 	// data = {"name": name, "company": company, "category": category, "description": description}
@@ -214,13 +274,6 @@ app.post('/addApp', function(req, res) {
 	var company = req.body.company;
 	var category = req.body.category;
 	var description = req.body.description;
-	
-	var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      res.write('File uploaded');
-      res.end();
-    });
-
 
 	var con = mysql.createConnection({
 		host: "localhost",
@@ -236,6 +289,11 @@ app.post('/addApp', function(req, res) {
 	  
 			con.query("INSERT INTO Apps(AppName, CompanyName, Category, AppDescription) VALUES ('" + name + "', '" + company + "', '" + category + "', '" + description + "');", (err, results)=>{
 				if (err) throw err;
+
+				const fs = require('fs');
+				fs.rename('./public/imgs/' + req.body.filename, './public/imgs/' + name.toLowerCase().replace(/ /g,"_") + ".png", ()=>{
+					console.log("successful image upload");
+				});
 
 				//const path = __dirname + '/public/imgs/' + name.toLowerCase().replace(/ /g,"_"); + ".png"
 				//Image.mv()
