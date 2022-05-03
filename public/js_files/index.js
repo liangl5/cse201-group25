@@ -13,8 +13,13 @@ function loadEverything() {
             globalAppData = message["apps"];
             globalCommentData = message["comments"];
             globalPendingApps = message["pendingapps"]
-            console.log(globalCommentData)
+
+            if (getCookie("privilege") == 2) {
+                console.log("is admin")
+                renderFormsForAdmin();
+            }
             document.getElementById("searchBtn").click();
+
         }
     }
 
@@ -55,17 +60,12 @@ if (test==null) {
     renderLogin(false, test);
 } else {
     console.log("yes login cookie")
-
     if (getCookie("privilege") == 2) {
-        console.log("is admin")
-
-        // render the admin accept forms
-        document.getElementById("")
-
         document.getElementById("adminPrivileges").style.display = "inline"
     }
     renderLogin(true, test);
 }
+
 
 // how to deal with cookies
 function getCookie(name) {
@@ -103,6 +103,51 @@ function renderLogin(isLoggedIn, name) {
 }
 
 
+function renderFormsForAdmin() {
+    var displayHTML = "<h3>Admin Pending Forms</h3>"
+
+    for (i = 0; i < globalPendingApps.length; i++) {
+        var converted =  globalPendingApps[i]["AppName"].toLowerCase().replace(/ /g,"_");
+
+        displayHTML += "<div class='displayPendingApps'>"
+
+        // name
+        displayHTML += "<h3 class='middle bottompadding'>" + globalPendingApps[i]["AppName"] + "</h3>"
+
+        // img
+        displayHTML += '<img class="appImage" src="./imgs/' + converted + '.png" alt="' + converted + '">'
+
+        // company name
+        displayHTML += "<h4 class='left'>" + globalPendingApps[i]["CompanyName"] + "</h4>"
+
+        // Category
+        displayHTML += "<h4 class='left bottompadding'>" + globalPendingApps[i]["Category"] + "</h4>"
+
+        // description
+        displayHTML += "<p class='left'>" + globalPendingApps[i]["AppDescription"] + "</p>"
+
+        displayHTML += "<button class='approveBtn'>Approve</button>";
+        displayHTML += "<button class='rejectBtn'>Reject</button>";
+        displayHTML += "</div>"
+    }
+
+    // nothing to display
+    if (globalPendingApps.length == 0) {
+        displayHTML += "<p>No current pending submissions</p>"
+    }
+
+    console.log(displayHTML)
+
+    document.getElementById("adminPrivileges").innerHTML = displayHTML;
+}
+
+function updateApps() {
+    // TO DO,
+    // update the pending apps
+    // and then just press search
+}
+
+
 // This part initally sets up event listeners to the nav bar and will correctly change color
 // when clicked
 var navBtns = document.getElementsByClassName("nav")
@@ -129,6 +174,47 @@ for (const element of navBtns) {
         }
 
     })
+}
+
+// renders apps in the home page
+function renderHome(displayApps) {
+// inner html
+    displayHTML = ""
+    for (i = 0; i < displayApps.length; i++) {
+        var converted =  displayApps[i]["AppName"].toLowerCase().replace(/ /g,"_");
+
+        displayHTML += "<div class='displayApps'>"
+
+        // name
+        displayHTML += "<h3 class='middle bottompadding'>" + displayApps[i]["AppName"] + "</h3>"
+
+        // img
+        displayHTML += '<img class="appImage" src="./imgs/' + converted + '.png" alt="' + converted + '">'
+
+        // company name
+        displayHTML += "<h4 class='left'>" + displayApps[i]["CompanyName"] + "</h4>"
+
+        // Category
+        displayHTML += "<h4 class='left bottompadding'>" + displayApps[i]["Category"] + "</h4>"
+
+        // description
+        displayHTML += "<p class='left'>" + displayApps[i]["AppDescription"] + "</p>"
+
+    
+        // enlarge / shrink button
+        displayHTML += "<button state='expand' class='sizeChange' value='" + displayApps[i]["AppID"] + "'>&#129141;</button>"
+
+        // comments        
+        displayHTML += "<div class='commentSection' id='commentSection" + displayApps[i]["AppID"] + "'>" + updateComments(displayApps[i]["AppID"]) + "</div>"
+
+        displayHTML += "</div>"
+    }
+
+        // nothing to display
+    if (displayHTML == "") {
+        displayHTML = "<p>No search results, try different keywords</p>"
+    }
+        document.getElementById("HomeDiv").innerHTML = displayHTML
 }
 
 
@@ -159,43 +245,7 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
         displayApps = globalAppData
     }
 
-    // inner html
-    displayHTML = ""
-    for (i = 0; i < displayApps.length; i++) {
-        var converted =  displayApps[i]["AppName"].toLowerCase().replace(/ /g,"_");
-
-        displayHTML += "<div class='displayApps'>"
-
-        // name
-        displayHTML += "<h3 class='middle bottompadding'>" + displayApps[i]["AppName"] + "</h3>"
-
-        // img
-        displayHTML += '<img class="appImage" src="./imgs/' + converted + '.png" alt="' + converted + '">'
-
-        // company name
-        displayHTML += "<h4 class='left'>" + displayApps[i]["CompanyName"] + "</h4>"
-
-        // Category
-        displayHTML += "<h4 class='left bottompadding'>" + displayApps[i]["Category"] + "</h4>"
-
-        // description
-        displayHTML += "<p class='left'>" + displayApps[i]["AppDescription"] + "</p>"
-
-        
-        // enlarge / shrink button
-        displayHTML += "<button state='expand' class='sizeChange' value='" + displayApps[i]["AppID"] + "'>&#129141;</button>"
-
-        // comments        
-        displayHTML += "<div class='commentSection' id='commentSection" + displayApps[i]["AppID"] + "'>" + updateComments(displayApps[i]["AppID"]) + "</div>"
-
-        displayHTML += "</div>"
-    }
-
-    // nothing to display
-    if (displayHTML == "") {
-        displayHTML = "<p>No search results, try different keywords</p>"
-    }
-    document.getElementById("HomeDiv").innerHTML = displayHTML
+    renderHome(displayApps);
 
     
 
@@ -423,6 +473,11 @@ function formSubmit(event) {
                         console.log("added successfully")
                         notificationText_corr.innerHTML = "Sucessful Submission"
                         notification_corr.style.display = "inline";
+
+                        renderFormsForAdmin()
+                    } else {
+                        notificationText.innerHTML = "Unexpected Error Occurred"
+                        notification.style.display = "inline";
                     }
                 
                 }
@@ -436,7 +491,8 @@ function formSubmit(event) {
         };
  
         request.onerror = function() {
-            // request failed
+            notificationText.innerHTML = "Error Uploading Image"
+            notification.style.display = "inline";
         };
  
         request.send(new FormData(event.target)); // create FormData from form that triggered event
