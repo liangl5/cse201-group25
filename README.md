@@ -1,8 +1,11 @@
 # Group 25
-Technical Document
+Overall Documentation (Restricted Access)
+https://docs.google.com/document/d/1MGYXpsvGxI9g_1bSOe9LQZuhvUkG2LuvX6B0Sh2f-5Y/edit?usp=sharing
+
+Technical Document (Public)
 https://docs.google.com/document/d/15rOYIVEzDALziPNeEGgh890LhyOyoE7Aqu9RoEerz6U/edit?usp=sharing
 
-Installation Instructions
+Installation Instructions (Public)
 https://docs.google.com/document/d/1_LciKn3coQOPdeYMs_GHF_Wnphq2L6QRZFNRs8l2Esw/edit?usp=sharing
 
 # The Team:
