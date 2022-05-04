@@ -45,7 +45,6 @@ function loadApps() {
             }
 
             renderHome(globalAppData);
-            addListenersToApps()
         }
     }
 
@@ -200,7 +199,9 @@ function dealWithPendingForm(e, action) {
             var accdata = JSON.parse(xhr.responseText);
                 if (accdata.error == 0) {
                     console.log(accdata);
-                    loadApps();
+                    
+                    // reloads the page to accomodate
+                    location.reload();
                 }
             }
         }
@@ -274,7 +275,9 @@ function renderHome(displayApps) {
     if (displayHTML == "") {
         displayHTML = "<p>No search results, try different keywords</p>"
     }
-        document.getElementById("HomeDiv").innerHTML = displayHTML
+    document.getElementById("HomeDiv").innerHTML = displayHTML
+    addListenersToApps();
+    addListenersToShrinkBtn();  
 }
 
 
