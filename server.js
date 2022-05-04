@@ -1,10 +1,41 @@
+// Author : Luke Liang
+// End Date : 5/3/2022
+
+// Purpose : Creates a server in NodeJS that supports POST and GET requests from the client to connect to the retive information or edit the database.
+
+
+// LIBRARY USAGE - can be found using CTRL + F
+
+// NodeJS - the entire file needs to be run with the command line node server.js
+
+// mysql - everytime a connection to the database is used
+// locations - lines 53, 88, 120, 158, 183, etc.
+
+// path - used to connect two strings together with a path operand, definitely not needed (as got kind of ignored)
+// locations - line 39
+
+// express - used to host the server with a server name and port number
+// locations - lines 38, 41, 
+
+// multer - used to download images onto the server uploaded from the client
+// locations - lines 336, 345
+
+// body-parser - used by the server to handle information to it by the post request
+// locations - lines 150, 151
+
+// fs - used to handle file systems by the server (i.e. downloading images and removing them)
+// locations - lines 257, 383
+
+
+
+// import statments
 var mysql = require('mysql');
 var path = require('path');
 var express = require('express');
 var multer = require('multer');
-var app = express();
 const fs = require('fs');
 
+var app = express();
 var htmlPath = path.join(__dirname, 'public');
 
 app.use(express.static(htmlPath));

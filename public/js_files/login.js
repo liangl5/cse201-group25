@@ -1,3 +1,10 @@
+// Author : Luke Liang
+// End Date : 5/3/2022
+
+// Purpose : Adds javascript functionality to logging in and creating an account
+
+
+
 // swapping between the two forms
 document.getElementById("createAccBtn").addEventListener("click", ()=>{
     document.getElementById("createAccDiv").style.display = "block";

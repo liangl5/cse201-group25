@@ -1,4 +1,11 @@
-// basic initialization
+// Author : Luke Liang
+// End Date : 5/3/2022
+
+// Purpose : Adds javascript functionality to index.html, this includes displaying apps, any type of clicking, commenting, login, adding forms, etc.
+
+
+
+
 globalAppData = []
 globalCommentData = []
 globalPendingApps = []
