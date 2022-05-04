@@ -1,4 +1,7 @@
 # Group 25
+Technical Document
+https://docs.google.com/document/d/15rOYIVEzDALziPNeEGgh890LhyOyoE7Aqu9RoEerz6U/edit?usp=sharing
+
 Installation Instructions
 https://docs.google.com/document/d/1_LciKn3coQOPdeYMs_GHF_Wnphq2L6QRZFNRs8l2Esw/edit?usp=sharing
 
