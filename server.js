@@ -3,6 +3,7 @@ var path = require('path');
 var express = require('express');
 var multer = require('multer');
 var app = express();
+const fs = require('fs');
 
 var htmlPath = path.join(__dirname, 'public');
 
@@ -74,7 +75,7 @@ app.get('/loadApps',function(req,res) {
 				var dataToSendToClient = {'apps': result, "pendingapps":pending_results};
 				// convert whatever we want to send (preferably should be an object) to JSON
 				var JSONdata = JSON.stringify(dataToSendToClient);
-				
+
 				console.log(JSONdata);
 				res.send(JSONdata);
 			});
@@ -200,6 +201,64 @@ app.post('/removeComment', function(req, res) {
 	});	
 });
 
+
+app.post('/rejectApp', function(req, res) {
+	var AppID = req.body.AppID
+
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "password"
+	});
+
+	con.connect(function(err) {
+		if (err) throw err;
+		con.query("USE GitApps;", ()=>{});
+
+			con.query("SELECT AppName FROM Apps WHERE AppID='" + AppID + "';", (err1, results1)=>{
+				if (err1) throw err1;
+				var appName = results1[0]["AppName"].toLowerCase().replace(/ /g,"_");
+
+
+				con.query("DELETE FROM Apps WHERE AppID='" + AppID + "';", (err, results)=>{
+					if (err) throw err;
+
+					fs.unlink("./public/imgs/" + appName + ".png", function (err) {
+						if (err) throw err;
+						// if no error, file has been deleted successfully
+						console.log('File deleted!');
+					});
+					res.send(JSON.stringify({"error": 0, "message": "Deleted App Removed"}));
+				});
+
+			});
+	});	
+});
+
+app.post('/approveApp', function(req, res) {
+	var AppID = req.body.AppID
+
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "password"
+	});
+
+	con.connect(function(err) {
+		if (err) throw err;
+		con.query("USE GitApps;", ()=>{});
+
+			con.query("UPDATE Apps SET Display=1 WHERE AppID='" + AppID + "';", (err, results)=>{
+				if (err) throw err;
+				res.send(JSON.stringify({"error": 0, "message": "Accepted App"}));
+			});
+
+	});	
+});
+
+
+
+
 app.post('/createAccount', function(req, res) {
 
 	var username = req.body.username
@@ -290,7 +349,6 @@ app.post('/addApp', function(req, res) {
 			con.query("INSERT INTO Apps(AppName, CompanyName, Category, AppDescription) VALUES ('" + name + "', '" + company + "', '" + category + "', '" + description + "');", (err, results)=>{
 				if (err) throw err;
 
-				const fs = require('fs');
 				fs.rename('./public/imgs/' + req.body.filename, './public/imgs/' + name.toLowerCase().replace(/ /g,"_") + ".png", ()=>{
 					console.log("successful image upload");
 				});

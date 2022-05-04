@@ -418,3 +418,21 @@ html, body {
   margin: 10px 0 0 0;
   display: none;
 }
+
+.approveBtn {
+  max-width: 100px;
+  width: 100px;
+  padding: 5px 0 5px 0;
+  margin: 10px;
+  background-color: rgb(118, 221, 131);
+  border-color: rgb(118, 221, 131);
+}
+
+.rejectBtn {
+  max-width: 100px;
+  width: 100px;
+  padding: 5px 0 5px 0;
+  margin: 10px;
+  background-color: rgb(223, 113, 113);
+  border-color: rgb(223, 113, 113);
+}

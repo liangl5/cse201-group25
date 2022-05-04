@@ -28,6 +28,31 @@ function loadEverything() {
 }
 loadEverything();
 
+// load app data
+function loadApps() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            var message = JSON.parse(xhr.responseText);
+
+            globalAppData = message["apps"];
+            globalPendingApps = message["pendingapps"]
+            console.log(globalPendingApps);
+
+            if (getCookie("privilege") == 2) {
+                console.log("is admin")
+                renderFormsForAdmin();
+            }
+
+            renderHome(globalAppData);
+            addListenersToApps()
+        }
+    }
+
+    xhr.open('GET', '/loadApps', true);
+    xhr.send(null);
+}
+
 
 
 // notification setup
@@ -126,8 +151,8 @@ function renderFormsForAdmin() {
         // description
         displayHTML += "<p class='left'>" + globalPendingApps[i]["AppDescription"] + "</p>"
 
-        displayHTML += "<button class='approveBtn'>Approve</button>";
-        displayHTML += "<button class='rejectBtn'>Reject</button>";
+        displayHTML += "<button class='approveBtn' value='" + globalPendingApps[i]["AppID"] + "'>Approve</button>";
+        displayHTML += "<button class='rejectBtn' value='" + globalPendingApps[i]["AppID"] + "'>Reject</button>";
         displayHTML += "</div>"
     }
 
@@ -135,16 +160,51 @@ function renderFormsForAdmin() {
     if (globalPendingApps.length == 0) {
         displayHTML += "<p>No current pending submissions</p>"
     }
-
-    console.log(displayHTML)
-
     document.getElementById("adminPrivileges").innerHTML = displayHTML;
+    addFormEventListeners();
 }
 
-function updateApps() {
-    // TO DO,
-    // update the pending apps
-    // and then just press search
+// add event listeners to the approve and reject button
+function addFormEventListeners() {
+    var approveBtn = document.getElementsByClassName("approveBtn");
+    var rejectBtn = document.getElementsByClassName("rejectBtn");
+
+    for(i = 0; i < approveBtn.length; i++) {
+        approveBtn[i].addEventListener("click", (e)=>{
+            dealWithPendingForm(e, "approve")
+        });
+        rejectBtn[i].addEventListener("click", (e)=>{
+            dealWithPendingForm(e, "reject")
+        });
+    }
+}
+
+// remove or add the app
+function dealWithPendingForm(e, action) {
+    var proceed = confirm("Are you sure you want to proceed?");
+
+    if (proceed) {
+
+        var AppID = e.target.value
+        data = {"AppID": AppID}
+        var path = (action=="approve" ? '/approveApp' : '/rejectApp')
+
+        var xhr = new window.XMLHttpRequest()
+        
+        xhr.open('POST', path, true)
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+        xhr.send(JSON.stringify(data))
+    
+        xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            var accdata = JSON.parse(xhr.responseText);
+                if (accdata.error == 0) {
+                    console.log(accdata);
+                    loadApps();
+                }
+            }
+        }
+    }
 }
 
 
@@ -474,7 +534,7 @@ function formSubmit(event) {
                         notificationText_corr.innerHTML = "Sucessful Submission"
                         notification_corr.style.display = "inline";
 
-                        renderFormsForAdmin()
+                        loadApps();
                     } else {
                         notificationText.innerHTML = "Unexpected Error Occurred"
                         notification.style.display = "inline";
