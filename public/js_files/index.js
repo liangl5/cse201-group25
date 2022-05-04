@@ -201,7 +201,7 @@ function dealWithPendingForm(e, action) {
                     console.log(accdata);
                     
                     // reloads the page to accomodate
-                    location.reload();
+                    loadApps();
                 }
             }
         }
@@ -276,8 +276,19 @@ function renderHome(displayApps) {
         displayHTML = "<p>No search results, try different keywords</p>"
     }
     document.getElementById("HomeDiv").innerHTML = displayHTML
+
+
+    // update value of display apps so we can know which display apps was clicked
+    var appsDiv = document.getElementsByClassName("displayApps");
+    var sizeBtn = document.getElementsByClassName("sizeChange");
+    var commentSection = document.getElementsByClassName("commentSection");
+    for (var i = 0; i < appsDiv.length; i++) {
+        appsDiv[i].value = displayApps[i]["AppID"]
+        sizeBtn[i].state = "expand"
+        commentSection.value = displayApps[i]["AppID"]
+    }
+
     addListenersToApps();
-    addListenersToShrinkBtn();  
 }
 
 
@@ -309,20 +320,6 @@ document.getElementById("searchBtn").addEventListener("click", (evt)=>{
     }
 
     renderHome(displayApps);
-
-    
-
-    // update value of display apps so we can know which display apps was clicked
-    var appsDiv = document.getElementsByClassName("displayApps");
-    var sizeBtn = document.getElementsByClassName("sizeChange");
-    var commentSection = document.getElementsByClassName("commentSection");
-    for (var i = 0; i < appsDiv.length; i++) {
-        appsDiv[i].value = displayApps[i]["AppID"]
-        sizeBtn[i].state = "expand"
-        commentSection.value = displayApps[i]["AppID"]
-    }
-
-    addListenersToApps();
 });
 
 // creates the commentSection
