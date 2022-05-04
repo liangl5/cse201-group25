@@ -23,7 +23,7 @@
 // body-parser - used by the server to handle information to it by the post request
 // locations - lines 150, 151
 
-// fs - used to handle file systems by the server (i.e. downloading images and removing them)
+// fs - used to handle file systems by the server (i.e. moving images to different paths and removing them)
 // locations - lines 257, 383
 
 
